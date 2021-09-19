@@ -1,18 +1,18 @@
 .login-forget-password {
-    margin: auto auto;
+  margin: auto auto;
 }
 
 .login-forget-password:hover {
-    text-decoration: underline;
-    cursor: pointer;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .login-two-buttons {
-    display: flex;
-    justify-items: space-between;
+  display: flex;
+  justify-items: space-between;
 }
 
 .login-spinner {
-    display: flex;
-    justify-items: space-between;
+  display: flex;
+  justify-items: space-between;
 }
