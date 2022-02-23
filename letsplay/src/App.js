@@ -6,14 +6,17 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
 import NotFound from './pages/notFound';
+import NavBar from './components/navBar';
 
 const queryClient = new QueryClient();
+const token = localStorage.getItem('letsplay_token');
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <main>
+          {token && <NavBar />}
           <Switch>
             <Route exact path="/">
               <Login />
