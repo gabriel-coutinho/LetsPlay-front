@@ -128,3 +128,23 @@ export async function changePassword(newPassword, setIsLoading) {
     toast.error(msg);
   }
 }
+
+export async function getPostByStatus(postStatus, setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/post?status=${postStatus}`;
+    const result = await api.get(url);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
