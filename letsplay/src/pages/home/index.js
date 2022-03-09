@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import PostCard from '../../components/postCard';
 import { getPostByStatus } from '../../api';
 import Spinner from '../../components/spinnerLoading';
+import { useStyles } from './styles';
 
 function Home() {
+  const classes = useStyles();
   const [isLoading, setIsLoading] = useState(false);
   const [postsHome, setPostsHome] = useState([]);
   const [postStatus] = useState('OPEN');
@@ -15,10 +17,12 @@ function Home() {
 
   return (
     <>
-      {isLoading && <Spinner />}
-      {postsHome.map((post) => (
-        <PostCard post={post} />
-      ))}
+      <div className={classes.root}>
+        {isLoading && <Spinner />}
+        {postsHome.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </div>
     </>
   );
 }

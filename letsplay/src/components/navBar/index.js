@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -10,19 +9,8 @@ import Tab from '@material-ui/core/Tab';
 import IconUser from '../icons/iconUser';
 import IconLogo from '../icons/iconLogo';
 import { getLoggedUser } from '../../api';
-
+import { useStyles } from './styles';
 import '../../pages/login/login.css';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width: '100%',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: '#F39189',
-  },
-}));
 
 export default function NavBar() {
   const classes = useStyles();
