@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -11,13 +11,25 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChatIcon from '@material-ui/icons/Chat';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { addressToPost } from '../../utils/addressFormat';
+import { fullDate } from '../../utils/dateFormat';
 import { useStyles } from './styles';
 
 export default function PostCard({ post }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const { sport } = post;
+  const { owner } = post;
+  const title = `${post.title} - ${sport.name}`;
+  const [address, setAddress] = useState('');
+  const fullNameOwner = `${owner.name.concat(` ${owner.lastName}`)}`;
+  const postDate = fullDate(post.date);
+
+  useEffect(() => {
+    setAddress(addressToPost(post.address));
+  }, []);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -28,7 +40,7 @@ export default function PostCard({ post }) {
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
-            {post.owner.name}
+            {owner.name?.charAt(0) + owner.lastName?.charAt(0)}
           </Avatar>
         }
         action={
@@ -36,18 +48,18 @@ export default function PostCard({ post }) {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      />
-      <CardMedia
-        className={classes.media}
-        image="/static/images/cards/paella.jpg"
-        title="Paella dish"
+        title={fullNameOwner}
+        subheader={postDate}
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
+        <Typography variant="h5" component="p">
+          {title}
+        </Typography>
+      </CardContent>
+      <CardMedia className={classes.media} image={sport.image.firebaseUrl} title="Sport image" />
+      <CardContent>
+        <Typography variant="body2">
+          <b>Local do Evento:</b> {address}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -65,7 +77,7 @@ export default function PostCard({ post }) {
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+          <ChatIcon />
         </IconButton>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>

@@ -1,13 +1,15 @@
-import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    width: '80%',
+    margin: 'auto',
+    marginTop: '3%',
+    backgroundColor: '#F39189',
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '12%', // 16:9
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -20,6 +22,6 @@ export const useStyles = makeStyles((theme) => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: '#6E7582',
   },
 }));

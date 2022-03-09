@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -9,6 +9,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import IconUser from '../icons/iconUser';
 import IconLogo from '../icons/iconLogo';
+import { getLoggedUser } from '../../api';
 
 import '../../pages/login/login.css';
 
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export default function NavBar() {
   const classes = useStyles();
   const history = useHistory();
+  const [loggedUser, setLoggedUser] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
 
   const logout = () => localStorage.removeItem('letsplay_token');
@@ -49,6 +51,11 @@ export default function NavBar() {
     history.push('/');
   };
 
+  useEffect(async () => {
+    const response = await getLoggedUser();
+    setLoggedUser(response?.data);
+  }, []);
+
   return (
     <div className={classes.root}>
       <AppBar
@@ -64,7 +71,7 @@ export default function NavBar() {
           <Tab
             icon={<IconLogo />}
             onClick={() => {
-              history.push('/register');
+              history.push('/home');
             }}
           />
           <Tab
@@ -100,7 +107,8 @@ export default function NavBar() {
         </Tabs>
         <div style={{ marginRight: '50px' }}>
           <Avatar className={classes.avatar} onClick={handleClick}>
-            N
+            {loggedUser?.name?.charAt(0).toUpperCase() +
+              loggedUser?.lastName?.charAt(0).toUpperCase()}
           </Avatar>
           <Menu
             id="simple-menu"

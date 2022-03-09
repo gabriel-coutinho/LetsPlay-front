@@ -148,3 +148,19 @@ export async function getPostByStatus(postStatus, setIsLoading) {
     toast.error(msg);
   }
 }
+
+export async function getLoggedUser() {
+  try {
+    const url = `/user/loggedUser`;
+    const result = await api.get(url);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
