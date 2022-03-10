@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, CircularProgress } from '@material-ui/core';
+import { toast } from 'react-toastify';
 import { CustomTextField } from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
 
@@ -8,7 +9,7 @@ import {
   FORGET_PASSWORD_VERIFY_CODE,
   FORGERT_PASSWORD_CHANGE_PASSWORD,
 } from '../../utils/contants';
-import { forgetPassword, verifyCodeRequest, changePassword } from '../../api';
+import { forgetPassword, verifyCodeRequest, changePassword, login } from '../../api';
 
 const useStyles = makeStyles({
   bottomSpace: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ForgetPassword({ flip }) {
+function ForgetPassword({ setFlip }) {
   const style = useStyles();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,8 +50,10 @@ function ForgetPassword({ flip }) {
 
   const goToLogin = () => {
     resetStates();
-    flip(false);
+    setFlip(false);
   };
+
+  const typeInput = () => (state === FORGERT_PASSWORD_CHANGE_PASSWORD.state ? 'password' : '');
 
   const valueInput = () => {
     if (state === FORGET_PASSWORD_EMAIL.state) {
@@ -155,9 +158,27 @@ function ForgetPassword({ flip }) {
       }
     } else if (state === FORGERT_PASSWORD_CHANGE_PASSWORD.state) {
       if (validatePasswords()) {
-        await changePassword(password, setIsLoading);
-        goToNextState();
+        const result = await changePassword(password, setIsLoading);
+        if (result) {
+          const resultLogin = await login(email, password, setIsLoading);
+
+          if (resultLogin) {
+            const { token, user } = resultLogin.data;
+
+            await localStorage.setItem('letsplay_token', token);
+
+            toast(`Bem-vindo ${user.name}!`);
+            window.location.replace('/home');
+          }
+        }
       }
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendRequest();
     }
   };
 
@@ -165,17 +186,21 @@ function ForgetPassword({ flip }) {
     <>
       <form style={{ marginTop: '60px', flexDirection: 'column', display: 'flex', width: '100%' }}>
         <CustomTextField
+          onKeyDown={handleKeyDown}
           className={style.bottomSpace}
           label={nameInput}
           error={errorInput()}
           variant="outlined"
+          type={typeInput()}
           value={valueInput()}
           onChange={onChangeInput()}
         />
         {state === FORGERT_PASSWORD_CHANGE_PASSWORD.state && (
           <CustomTextField
+            onKeyDown={handleKeyDown}
             className={style.bottomSpace}
             label="Confirmar Senha"
+            type="password"
             error={errorConfirmPassword}
             variant="outlined"
             value={confirmPassword}

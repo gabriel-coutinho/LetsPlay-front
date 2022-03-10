@@ -20,7 +20,7 @@ function Home() {
       <div className={classes.root}>
         {isLoading && <Spinner />}
         {postsHome.map((post) => (
-          <PostCard post={post} />
+          <PostCard key={post.id} post={post} />
         ))}
       </div>
     </>

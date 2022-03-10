@@ -33,8 +33,8 @@ function Login() {
           flipDirection="horizontal"
           containerStyle={{ width: '100%' }}
         >
-          <LoginForm flip={setIsFlipped} />
-          <ForgetPassword flip={setIsFlipped} />
+          <LoginForm setFlip={setIsFlipped} />
+          <ForgetPassword setFlip={setIsFlipped} />
         </ReactCardFlip>
       </Container>
     </div>

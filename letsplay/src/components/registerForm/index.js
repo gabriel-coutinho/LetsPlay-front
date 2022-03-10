@@ -150,6 +150,12 @@ export default function RegisterForm() {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      registerRequest();
+    }
+  };
+
   return (
     <>
       <form style={{ marginTop: '60px', flexDirection: 'column', display: 'flex', width: '100%' }}>
@@ -160,6 +166,7 @@ export default function RegisterForm() {
             error={errorName}
             variant="outlined"
             value={name}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setName(e.target.value)}
           />
           <CustomTextField
@@ -168,6 +175,7 @@ export default function RegisterForm() {
             error={errorLastName}
             variant="outlined"
             value={lastName}
+            onKeyDown={handleKeyDown}
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
@@ -177,6 +185,7 @@ export default function RegisterForm() {
           error={errorEmail}
           variant="outlined"
           value={email}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setEmail(e.target.value)}
         />
         <CustomTextField
@@ -185,6 +194,7 @@ export default function RegisterForm() {
           error={errorPhoneNumber}
           variant="outlined"
           value={phoneNumber}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
         <CustomTextField
@@ -194,6 +204,7 @@ export default function RegisterForm() {
           variant="outlined"
           type="password"
           value={password}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setPassword(e.target.value)}
         />
         <CustomTextField
@@ -203,6 +214,7 @@ export default function RegisterForm() {
           variant="outlined"
           type="password"
           value={confirmPassword}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <CustomButton size="large" className={style.bottomSpace} onClick={registerRequest}>

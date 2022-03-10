@@ -7,6 +7,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: '#F39189',
+    backgroundColor: '#6E7582',
+    cursor: 'pointer',
   },
 }));

@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-function LoginForm({ flip }) {
+function LoginForm({ setFlip }) {
   const style = useStyles();
   const history = useHistory();
 
@@ -31,7 +31,7 @@ function LoginForm({ flip }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const goToForgetPassword = () => {
-    flip(true);
+    setFlip(true);
   };
 
   const goToRegister = () => {
@@ -73,6 +73,13 @@ function LoginForm({ flip }) {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      auth();
+    }
+  };
+
   return (
     <>
       <form style={{ marginTop: '60px', flexDirection: 'column', display: 'flex', width: '100%' }}>
@@ -82,6 +89,7 @@ function LoginForm({ flip }) {
           error={errorEmail}
           variant="outlined"
           value={email}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setEmail(e.target.value)}
         />
         <CustomTextField
@@ -91,6 +99,7 @@ function LoginForm({ flip }) {
           variant="outlined"
           type="password"
           value={password}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setPassword(e.target.value)}
         />
         <CustomButton size="large" className={style.bottomSpace} onClick={auth}>

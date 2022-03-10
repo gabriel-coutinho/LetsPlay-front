@@ -110,7 +110,7 @@ export default function PostCard({ post }) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           {comments.map((comment) => (
-            <CommentCard comment={comment} />
+            <CommentCard key={comment.id} comment={comment} />
           ))}
         </CardContent>
       </Collapse>
