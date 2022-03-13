@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import Menu from '@material-ui/core/Menu';
@@ -9,7 +9,9 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { getLoggedUser, deleteComment } from '../../api';
+import { LoggedUserContext } from '../../utils/loggedUserProvider';
+import { CommentsContext } from '../postCard/contexts';
+import { deleteComment } from '../../api';
 import { fullDateComment } from '../../utils/dateFormat';
 import { useStyles } from './styles';
 
@@ -18,16 +20,11 @@ export default function CommentCard({ comment }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [myComment, setMyComment] = useState(false);
+  const { updateCommentsInPost } = useContext(CommentsContext);
   const { owner } = comment;
-  const [loggedUser, setLoggedUser] = useState({});
+  const { loggedUser } = useContext(LoggedUserContext);
   const fullNameOwner = `${owner.name.concat(` ${owner.lastName}`)}`;
-  const commentDate = fullDateComment(comment.date);
-
-  useEffect(async () => {
-    const response = await getLoggedUser();
-    setLoggedUser(response?.data);
-    setMyComment(comment.owner.id === loggedUser.id);
-  }, []);
+  const commentDate = fullDateComment(comment.createdAt);
 
   useEffect(() => {
     setMyComment(comment.owner.id === loggedUser.id);
@@ -49,6 +46,7 @@ export default function CommentCard({ comment }) {
   const handleDelete = async () => {
     setAnchorEl(null);
     await deleteComment(comment.id);
+    updateCommentsInPost();
   };
 
   return (

@@ -169,6 +169,26 @@ export async function getPostByStatus(postStatus, setIsLoading) {
 }
 
 /* ROUTES COMMENT */
+export async function getCommentsByPostId(postId, setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/comment/post/${postId}`;
+    const result = await api.get(url);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function deleteComment(id) {
   try {
     const url = `/comment/${id}`;

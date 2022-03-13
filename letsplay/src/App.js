@@ -1,21 +1,19 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import React from 'react';
-
 import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
-
-const queryClient = new QueryClient();
-const token = localStorage.getItem('letsplay_token');
+import { LoggedUserProvider } from './utils/loggedUserProvider';
 
 function App() {
+  const token = localStorage.getItem('letsplay_token');
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <main>
+    <Router>
+      <main>
+        <LoggedUserProvider>
           {token && <NavBar />}
           <Switch>
             <Route exact path="/">
@@ -31,9 +29,9 @@ function App() {
               <NotFound />
             </Route>
           </Switch>
-        </main>
-      </Router>
-    </QueryClientProvider>
+        </LoggedUserProvider>
+      </main>
+    </Router>
   );
 }
 
