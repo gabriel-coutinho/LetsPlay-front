@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -13,10 +15,11 @@ import ShareIcon from '@material-ui/icons/Share';
 import ChatIcon from '@material-ui/icons/Chat';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { getCommentsByPostId } from '../../api';
+import { getCommentsByPostId, deletePost } from '../../api';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
 import { addressToPost } from '../../utils/addressFormat';
 import { fullDatePost } from '../../utils/dateFormat';
+import { PostsContext } from '../../pages/home/contexts';
 import CommentCard from '../commentCard';
 import { useStyles } from './styles';
 import { CommentsContext } from './contexts';
@@ -25,7 +28,9 @@ export default function PostCard({ post }) {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [myPost, setMyPost] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const { loggedUser } = useContext(LoggedUserContext);
+  const { updatePostsInHome } = useContext(PostsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [commentIcon, setCommentIcon] = useState(<ChatIcon />);
   const { sport } = post;
@@ -64,6 +69,24 @@ export default function PostCard({ post }) {
     setExpanded(!expanded);
   };
 
+  const handleMoreClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleEdit = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDelete = async () => {
+    setAnchorEl(null);
+    await deletePost(post.id);
+    updatePostsInHome();
+  };
+
   return (
     <div>
       {!isLoading && (
@@ -76,14 +99,25 @@ export default function PostCard({ post }) {
             }
             action={
               myPost ? (
-                <IconButton
-                  className={classes.expand}
-                  onClick={handleExpandClick}
-                  aria-expanded={expanded}
-                  aria-label="settings"
-                >
-                  <MoreVertIcon />
-                </IconButton>
+                <div>
+                  <IconButton
+                    className={classes.expand}
+                    onClick={handleMoreClick}
+                    aria-label="settings"
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleEdit}>Editar</MenuItem>
+                    <MenuItem onClick={handleDelete}>Excluir</MenuItem>
+                  </Menu>
+                </div>
               ) : (
                 <></>
               )
@@ -102,10 +136,7 @@ export default function PostCard({ post }) {
             title="Sport image"
           />
           <CardContent>
-            <Typography variant="body2">Local do Evento:</Typography>
-            <Typography variant="body2" className={classes.colorSecondary}>
-              {address}
-            </Typography>
+            <Typography variant="body2">Local do Evento: {address}</Typography>
           </CardContent>
           <CardActions disableSpacing>
             <IconButton aria-label="add to favorites">

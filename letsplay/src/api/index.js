@@ -168,6 +168,22 @@ export async function getPostByStatus(postStatus, setIsLoading) {
   }
 }
 
+export async function deletePost(id) {
+  try {
+    const url = `/post/${id}`;
+    const result = await api.delete(url);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
 /* ROUTES COMMENT */
 export async function getCommentsByPostId(postId, setIsLoading) {
   try {

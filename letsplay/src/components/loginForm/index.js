@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { CircularProgress, makeStyles } from '@material-ui/core';
-
 import { CustomTextField } from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
 import { login } from '../../api';
