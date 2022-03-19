@@ -52,6 +52,21 @@ export async function verifyCodeRequest(email, code, setIsLoading) {
   }
 }
 
+export async function verifyToken() {
+  try {
+    const url = '/auth/verifyToken';
+    const result = await api.get(url);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
 /* ROUTES USER */
 export async function createUser(name, lastName, phoneNumber, email, password, setIsLoading) {
   try {
