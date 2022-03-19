@@ -17,7 +17,7 @@ import { useStyles } from './styles';
 
 export default function CommentCard({ comment }) {
   const history = useHistory();
-  const classes = useStyles();
+  const style = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [myComment, setMyComment] = useState(false);
   const { updateCommentsInPost } = useContext(CommentsContext);
@@ -50,21 +50,17 @@ export default function CommentCard({ comment }) {
   };
 
   return (
-    <Card className={classes.root}>
+    <Card className={style.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
+          <Avatar aria-label="recipe" className={style.avatar}>
             {owner.name?.charAt(0) + owner.lastName?.charAt(0)}
           </Avatar>
         }
         action={
           myComment ? (
             <div>
-              <IconButton
-                className={classes.expand}
-                onClick={handleMoreClick}
-                aria-label="settings"
-              >
+              <IconButton className={style.expand} onClick={handleMoreClick} aria-label="settings">
                 <MoreVertIcon />
               </IconButton>
               <Menu

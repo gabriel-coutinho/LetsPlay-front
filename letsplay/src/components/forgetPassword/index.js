@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { makeStyles, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { toast } from 'react-toastify';
+import { useStyles } from './styles';
 import { CustomTextField } from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
 
@@ -10,15 +11,6 @@ import {
   FORGERT_PASSWORD_CHANGE_PASSWORD,
 } from '../../utils/contants';
 import { forgetPassword, verifyCodeRequest, changePassword, login } from '../../api';
-
-const useStyles = makeStyles({
-  bottomSpace: {
-    marginBottom: '30px',
-  },
-  center: {
-    alignSelf: 'center',
-  },
-});
 
 function ForgetPassword({ setFlip }) {
   const style = useStyles();
@@ -184,7 +176,7 @@ function ForgetPassword({ setFlip }) {
 
   return (
     <>
-      <form style={{ marginTop: '60px', flexDirection: 'column', display: 'flex', width: '100%' }}>
+      <form className={style.form}>
         <CustomTextField
           onKeyDown={handleKeyDown}
           className={style.bottomSpace}
@@ -212,24 +204,11 @@ function ForgetPassword({ setFlip }) {
         </CustomButton>
       </form>
       <div className="login-two-buttons">
-        <a
-          className="login-forget-password"
-          style={{ fontWeight: 'bold', color: 'rgb(4, 81, 105)' }}
-          onClick={goToLogin}
-        >
+        <a className="login-buttons" onClick={goToLogin}>
           Voltar para Login
         </a>
       </div>
-      <div
-        style={{
-          width: 'fit-content',
-          heigh: 'fit-content',
-          margin: '20px auto',
-          color: 'rgb(4, 81, 105)',
-        }}
-      >
-        {isLoading && <CircularProgress color="inherit" />}
-      </div>
+      <div className={style.spinner}>{isLoading && <CircularProgress color="inherit" />}</div>
     </>
   );
 }

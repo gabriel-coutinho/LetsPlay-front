@@ -1,33 +1,13 @@
-/* import React from 'react';
-
-function Register() {
-    return <h2>TELA DE CADASTRO</h2>
-}
-
-export default Register; */
-
 /* eslint consistent-return: off */
 
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core';
+import { useStyles } from './styles';
 
 import RegisterForm from '../../components/registerForm';
 import logo from '../login/logo.png';
 
 import '../login/login.css';
-
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  cont: {
-    display: 'flex',
-    minHeight: '100vh',
-  },
-});
 
 function Register() {
   const style = useStyles();

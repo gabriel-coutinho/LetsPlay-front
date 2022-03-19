@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import ReactCardFlip from 'react-card-flip';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core';
+import { useStyles } from './styles';
 
 import LoginForm from '../../components/loginForm';
 import ForgetPassword from '../../components/forgetPassword';
@@ -11,17 +11,8 @@ import logo from './logo.png';
 
 import './login.css';
 
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-});
-
 function Login() {
   const style = useStyles();
-
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (

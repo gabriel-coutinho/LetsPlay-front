@@ -13,7 +13,7 @@ import { LoggedUserContext } from '../../utils/loggedUserProvider';
 import '../../pages/login/login.css';
 
 export default function NavBar() {
-  const classes = useStyles();
+  const style = useStyles();
   const history = useHistory();
   const [avatarText, setAvatarText] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -51,17 +51,9 @@ export default function NavBar() {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={style.root}>
       {!isLoading && (
-        <AppBar
-          position="static"
-          style={{
-            backgroundColor: '#046582',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
+        <AppBar position="static" className={style.appBar}>
           <Tabs variant="scrollable" scrollButtons="off">
             <Tab
               icon={<IconLogo />}
@@ -100,8 +92,8 @@ export default function NavBar() {
               }}
             />
           </Tabs>
-          <div style={{ marginRight: '50px' }}>
-            <Avatar className={classes.avatar} onClick={handleClick}>
+          <div className={style.avatarMargin}>
+            <Avatar className={style.avatar} onClick={handleClick}>
               {avatarText}
             </Avatar>
             <Menu

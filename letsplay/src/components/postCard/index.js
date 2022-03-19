@@ -25,7 +25,7 @@ import { useStyles } from './styles';
 import { CommentsContext } from './contexts';
 
 export default function PostCard({ post }) {
-  const classes = useStyles();
+  const style = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [myPost, setMyPost] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -90,10 +90,10 @@ export default function PostCard({ post }) {
   return (
     <div>
       {!isLoading && (
-        <Card className={classes.root}>
+        <Card className={style.root}>
           <CardHeader
             avatar={
-              <Avatar aria-label="recipe" className={classes.avatar}>
+              <Avatar aria-label="recipe" className={style.avatar}>
                 {owner.name?.charAt(0) + owner.lastName?.charAt(0)}
               </Avatar>
             }
@@ -101,7 +101,7 @@ export default function PostCard({ post }) {
               myPost ? (
                 <div>
                   <IconButton
-                    className={classes.expand}
+                    className={style.expand}
                     onClick={handleMoreClick}
                     aria-label="settings"
                   >
@@ -130,11 +130,7 @@ export default function PostCard({ post }) {
               {title}
             </Typography>
           </CardContent>
-          <CardMedia
-            className={classes.media}
-            image={sport.image.firebaseUrl}
-            title="Sport image"
-          />
+          <CardMedia className={style.media} image={sport.image.firebaseUrl} title="Sport image" />
           <CardContent>
             <Typography variant="body2">Local do Evento: {address}</Typography>
           </CardContent>
@@ -146,7 +142,7 @@ export default function PostCard({ post }) {
               <ShareIcon />
             </IconButton>
             <IconButton
-              className={classes.expand}
+              className={style.expand}
               onClick={handleExpandClick}
               aria-expanded={expanded}
               aria-label="show more"

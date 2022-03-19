@@ -1,8 +1,18 @@
 .login-forget-password {
   margin: auto auto;
 }
+.login-buttons {
+  margin: auto auto;
+  font-weight: bold;
+  color: rgb(4, 81, 105);
+}
 
 .login-forget-password:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.login-buttons:hover {
   text-decoration: underline;
   cursor: pointer;
 }

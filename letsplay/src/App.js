@@ -3,6 +3,7 @@ import React from 'react';
 import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
+import NewPost from './pages/newPost';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
 import { LoggedUserProvider } from './utils/loggedUserProvider';
@@ -24,6 +25,9 @@ function App() {
             </Route>
             <Route exact path="/home">
               <Home />
+            </Route>
+            <Route exact path="/newPost">
+              <NewPost />
             </Route>
             <Route exact path="/*">
               <NotFound />

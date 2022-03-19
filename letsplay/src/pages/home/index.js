@@ -22,14 +22,16 @@ function Home() {
   };
 
   return (
-    <PostsContext.Provider value={{ updatePostsInHome }}>
-      <div className={classes.root}>
-        {isLoading && <Spinner />}
-        {postsHome.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
-    </PostsContext.Provider>
+    <>
+      <div className={classes.spinner}>{isLoading && <Spinner />}</div>
+      <PostsContext.Provider value={{ updatePostsInHome }}>
+        <div className={classes.root}>
+          {postsHome.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      </PostsContext.Provider>
+    </>
   );
 }
 

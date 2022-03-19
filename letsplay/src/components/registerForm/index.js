@@ -3,7 +3,7 @@
 import { toast } from 'react-toastify';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core';
+import { useStyles } from './styles';
 
 import { CustomTextField } from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
@@ -11,20 +11,6 @@ import { login, createUser } from '../../api';
 import Spinner from '../spinnerLoading';
 
 import '../loginForm/loginForm.css';
-
-const useStyles = makeStyles({
-  twoFields: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  bottomSpace: {
-    marginBottom: '30px',
-  },
-  center: {
-    alignSelf: 'center',
-  },
-});
 
 export default function RegisterForm() {
   const style = useStyles();
@@ -158,10 +144,10 @@ export default function RegisterForm() {
 
   return (
     <>
-      <form style={{ marginTop: '60px', flexDirection: 'column', display: 'flex', width: '100%' }}>
+      <form className={style.form}>
         <div className={`${style.twoFields} ${style.bottomSpace}`}>
           <CustomTextField
-            style={{ width: '48%' }}
+            className={style.shortField}
             label="Nome*"
             error={errorName}
             variant="outlined"
@@ -170,7 +156,7 @@ export default function RegisterForm() {
             onChange={(e) => setName(e.target.value)}
           />
           <CustomTextField
-            style={{ width: '48%' }}
+            className={style.shortField}
             label="Sobrenome*"
             error={errorLastName}
             variant="outlined"
@@ -221,15 +207,11 @@ export default function RegisterForm() {
           Registrar-se
         </CustomButton>
         <div className="login-two-buttons">
-          <a
-            className="login-forget-password"
-            style={{ fontWeight: 'bold', color: 'rgb(4, 81, 105)' }}
-            onClick={goToLogin}
-          >
+          <a className="login-buttons" onClick={goToLogin}>
             Já possui login? Entrar
           </a>
         </div>
-        {isLoading && <Spinner className={style.center} />}
+        <div className={style.spinner}>{isLoading && <Spinner />}</div>
       </form>
     </>
   );

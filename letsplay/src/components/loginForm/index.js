@@ -3,21 +3,13 @@
 import { toast } from 'react-toastify';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CircularProgress, makeStyles } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
+import { useStyles } from './styles';
 import { CustomTextField } from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
 import { login } from '../../api';
 
 import './loginForm.css';
-
-const useStyles = makeStyles({
-  bottomSpace: {
-    marginBottom: '30px',
-  },
-  center: {
-    alignSelf: 'center',
-  },
-});
 
 function LoginForm({ setFlip }) {
   const style = useStyles();
@@ -81,7 +73,7 @@ function LoginForm({ setFlip }) {
 
   return (
     <>
-      <form style={{ marginTop: '60px', flexDirection: 'column', display: 'flex', width: '100%' }}>
+      <form className={style.form}>
         <CustomTextField
           className={style.bottomSpace}
           label="Email"
@@ -105,27 +97,14 @@ function LoginForm({ setFlip }) {
           Entrar
         </CustomButton>
         <div className="login-two-buttons">
-          <a
-            className="login-forget-password"
-            style={{ fontWeight: 'bold', color: 'rgb(4, 81, 105)' }}
-            onClick={goToRegister}
-          >
+          <a className="login-buttons" onClick={goToRegister}>
             Cadastre-se
           </a>
           <a className="login-forget-password" onClick={goToForgetPassword}>
             Esqueceu a senha?
           </a>
         </div>
-        <div
-          style={{
-            width: 'fit-content',
-            heigh: 'fit-content',
-            margin: '20px auto',
-            color: 'rgb(4, 81, 105)',
-          }}
-        >
-          {isLoading && <CircularProgress color="inherit" />}
-        </div>
+        <div className={style.spinner}>{isLoading && <CircularProgress color="inherit" />}</div>
       </form>
     </>
   );
