@@ -6,4 +6,12 @@ export const useStyles = makeStyles(() => ({
     marginBottom: '1%',
     backgroundColor: '#BB8082',
   },
+  input: {
+    width: '98%',
+    margin: '1%',
+  },
+  button: {
+    marginLeft: '1%',
+    marginBottom: '1%',
+  },
 }));

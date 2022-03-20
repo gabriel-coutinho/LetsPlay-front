@@ -42,7 +42,9 @@ export default function CommentForm({ postId }) {
   return (
     <form className={style.root}>
       <CustomTextField
-        className={style.root}
+        multiline
+        minRows={3}
+        className={style.input}
         label="Escreva um comentário"
         error={errorContent}
         variant="outlined"
@@ -50,7 +52,7 @@ export default function CommentForm({ postId }) {
         onKeyDown={handleKeyDown}
         onChange={(e) => setContent(e.target.value)}
       />
-      <CustomButton size="large" onClick={handleCreate}>
+      <CustomButton className={style.button} size="large" onClick={handleCreate}>
         Comentar
       </CustomButton>
     </form>
