@@ -220,6 +220,28 @@ export async function getCommentsByPostId(postId, setIsLoading) {
   }
 }
 
+export async function createComment(content, ownerId, postId) {
+  try {
+    const url = '/comment';
+    const body = {
+      comment: {
+        content,
+        ownerId,
+        postId,
+      },
+    };
+    const result = await api.post(url, body);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
 export async function deleteComment(id) {
   try {
     const url = `/comment/${id}`;

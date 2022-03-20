@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import Menu from '@material-ui/core/Menu';
@@ -46,6 +47,7 @@ export default function CommentCard({ comment }) {
   const handleDelete = async () => {
     setAnchorEl(null);
     await deleteComment(comment.id);
+    toast.success('Comentário excluido com sucesso!');
     updateCommentsInPost();
   };
 

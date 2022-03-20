@@ -21,6 +21,7 @@ import { addressToPost } from '../../utils/addressFormat';
 import { fullDatePost } from '../../utils/dateFormat';
 import { PostsContext } from '../../pages/home/contexts';
 import CommentCard from '../commentCard';
+import CommentForm from '../commentForm';
 import { useStyles } from './styles';
 import { CommentsContext } from './contexts';
 
@@ -155,6 +156,7 @@ export default function PostCard({ post }) {
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CommentsContext.Provider value={{ updateCommentsInPost }}>
               <CardContent>
+                <CommentForm postId={post.id} />
                 {comments.map((comment) => (
                   <CommentCard key={comment.id} comment={comment} />
                 ))}
