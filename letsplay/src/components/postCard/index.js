@@ -10,8 +10,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import AddIcon from '@material-ui/icons/Add';
 import ChatIcon from '@material-ui/icons/Chat';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -137,11 +136,8 @@ export default function PostCard({ post }) {
             <Typography variant="body2">Local: {address}</Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
+            <IconButton aria-label="request">
+              <AddIcon />
             </IconButton>
             <IconButton
               className={style.expand}

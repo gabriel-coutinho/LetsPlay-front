@@ -39,10 +39,10 @@ function App() {
               <Route exact path="/help">
                 <Help />
               </Route>
-              <Route exact path="/user">
+              <Route exact path="/me">
                 <User />
               </Route>
-              <Route exact path="/user/edit">
+              <Route exact path="/me/edit">
                 <EditUser />
               </Route>
               <Route exact path="/*">

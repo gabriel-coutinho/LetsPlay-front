@@ -60,28 +60,32 @@ export default function NavBar() {
               }}
             />
             <Tab
-              icon={<AccountCircleOutlinedIcon fontSize="large" />}
+              icon={<AccountCircleOutlinedIcon fontSize="medium" />}
               onClick={() => {
-                history.push('/user');
+                history.push('/me');
               }}
+              label="PERFIL"
             />
             <Tab
-              icon={<AddCircleOutlineIcon fontSize="large" />}
+              icon={<AddCircleOutlineIcon fontSize="medium" />}
               onClick={() => {
                 history.push('/newPost');
               }}
+              label="NOVO POST"
             />
             <Tab
-              icon={<NotificationsNoneOutlinedIcon fontSize="large" />}
+              icon={<NotificationsNoneOutlinedIcon fontSize="medium" />}
               onClick={() => {
                 history.push('/register');
               }}
+              label="NOTIFICAÇÕES"
             />
             <Tab
-              icon={<HelpOutlineIcon fontSize="large" />}
+              icon={<HelpOutlineIcon fontSize="medium" />}
               onClick={() => {
                 history.push('/help');
               }}
+              label="SOBRE"
             />
           </Tabs>
           <div className={style.avatarMargin}>
