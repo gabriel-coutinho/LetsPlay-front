@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { useStyles } from './styles';
 
 import { CustomTextField } from '../styles/inputs.style';
@@ -241,6 +242,7 @@ export default function RegisterForm({ ownerId }) {
   return (
     <>
       <form className={style.form}>
+        <Typography paragraph>Evento</Typography>
         <div className={`${style.multiFields} ${style.bottomSpace}`}>
           <CustomTextField
             className={style.largeField}
@@ -307,6 +309,7 @@ export default function RegisterForm({ ownerId }) {
           onKeyDown={handleKeyDown}
           onChange={(e) => setDescribe(e.target.value)}
         />
+        <Typography paragraph>Endereço</Typography>
         <div className={`${style.multiFields} ${style.bottomSpace}`}>
           <CustomTextField
             className={style.largeField}
