@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 import React, { useState, useContext } from 'react';
 import { useStyles } from './styles';
 import { CustomTextField } from '../styles/inputs.style';
-import { CustomButton } from '../styles/button.style';
+import { CommentButton } from '../styles/button.style';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
 import { CommentsContext } from '../postCard/contexts';
 import { createComment } from '../../api';
@@ -52,9 +52,9 @@ export default function CommentForm({ postId }) {
         onKeyDown={handleKeyDown}
         onChange={(e) => setContent(e.target.value)}
       />
-      <CustomButton className={style.button} size="large" onClick={handleCreate}>
+      <CommentButton className={style.button} size="medium" onClick={handleCreate}>
         Comentar
-      </CustomButton>
+      </CommentButton>
     </form>
   );
 }

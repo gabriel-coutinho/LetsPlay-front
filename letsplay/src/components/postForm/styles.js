@@ -1,7 +1,13 @@
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  twoFields: {
+  root: {
+    margin: 'auto',
+    marginBottom: '1%',
+    backgroundColor: '#BB8082',
+  },
+
+  multiFields: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -17,13 +23,25 @@ export const useStyles = makeStyles({
   },
 
   form: {
-    marginTop: '60px',
+    margin: '3%',
     flexDirection: 'column',
     display: 'flex',
-    width: '100%',
+    width: '90%',
+  },
+
+  twoField: {
+    width: '48%',
+  },
+
+  threeField: {
+    width: '32%',
+  },
+
+  largeField: {
+    width: '80%',
   },
 
   shortField: {
-    width: '48%',
+    width: '17%',
   },
 });

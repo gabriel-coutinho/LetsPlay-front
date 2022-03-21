@@ -6,7 +6,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import IconUser from '../icons/iconUser';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import IconLogo from '../icons/iconLogo';
 import { useStyles } from './styles';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
@@ -39,11 +42,6 @@ export default function NavBar() {
     setAnchorEl(null);
   };
 
-  const handleProfile = () => {
-    setAnchorEl(null);
-    history.push('/register');
-  };
-
   const handleLogout = () => {
     setAnchorEl(null);
     logout();
@@ -62,31 +60,25 @@ export default function NavBar() {
               }}
             />
             <Tab
-              icon={<IconUser />}
+              icon={<AccountCircleOutlinedIcon fontSize="large" />}
               onClick={() => {
                 history.push('/register');
               }}
             />
             <Tab
-              icon={<IconUser />}
+              icon={<AddCircleOutlineIcon fontSize="large" />}
+              onClick={() => {
+                history.push('/newPost');
+              }}
+            />
+            <Tab
+              icon={<NotificationsNoneOutlinedIcon fontSize="large" />}
               onClick={() => {
                 history.push('/register');
               }}
             />
             <Tab
-              icon={<IconUser />}
-              onClick={() => {
-                history.push('/register');
-              }}
-            />
-            <Tab
-              icon={<IconUser />}
-              onClick={() => {
-                history.push('/register');
-              }}
-            />
-            <Tab
-              icon={<IconUser />}
+              icon={<HelpOutlineIcon fontSize="large" />}
               onClick={() => {
                 history.push('/register');
               }}
@@ -103,7 +95,6 @@ export default function NavBar() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleProfile}>Meu perfil</MenuItem>
               <MenuItem onClick={handleLogout}>Sair</MenuItem>
             </Menu>
           </div>

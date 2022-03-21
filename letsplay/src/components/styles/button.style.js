@@ -11,6 +11,17 @@ export const CustomButton = withStyles({
   },
 })(Button);
 
+export const CommentButton = withStyles({
+  root: {
+    color: '#F9F7F7',
+    backgroundColor: 'rgb(4, 101, 130)',
+    '&:hover': {
+      backgroundColor: 'rgb(4, 81, 105)',
+    },
+    fontSize: '0.8rem',
+  },
+})(Button);
+
 export const HeaderButton = withStyles({
   root: {
     color: '#3F72AF',

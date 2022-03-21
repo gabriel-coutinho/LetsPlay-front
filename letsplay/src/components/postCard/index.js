@@ -133,7 +133,8 @@ export default function PostCard({ post }) {
           </CardContent>
           <CardMedia className={style.media} image={sport.image.firebaseUrl} title="Sport image" />
           <CardContent>
-            <Typography variant="body2">Local do Evento: {address}</Typography>
+            {post.describe && <Typography variant="body1">Descrição: {post.describe}</Typography>}
+            <Typography variant="body2">Local: {address}</Typography>
           </CardContent>
           <CardActions disableSpacing>
             <IconButton aria-label="add to favorites">

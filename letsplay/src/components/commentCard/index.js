@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,7 +16,6 @@ import { fullDateComment } from '../../utils/dateFormat';
 import { useStyles } from './styles';
 
 export default function CommentCard({ comment }) {
-  const history = useHistory();
   const style = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [myComment, setMyComment] = useState(false);
@@ -37,11 +35,6 @@ export default function CommentCard({ comment }) {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleEdit = () => {
-    setAnchorEl(null);
-    history.push('/home');
   };
 
   const handleDelete = async () => {
@@ -72,7 +65,6 @@ export default function CommentCard({ comment }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleEdit}>Editar</MenuItem>
                 <MenuItem onClick={handleDelete}>Excluir</MenuItem>
               </Menu>
             </div>

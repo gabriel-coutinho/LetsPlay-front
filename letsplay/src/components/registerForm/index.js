@@ -103,7 +103,7 @@ export default function RegisterForm() {
     }
 
     if (!samePasswords()) {
-      // toast passwords diferentes
+      toast.error('As senhas devem ser iguais!');
       return false;
     }
 

@@ -163,6 +163,63 @@ export async function getLoggedUser() {
 }
 
 /* ROUTES POST */
+export async function createPost(
+  title,
+  describe,
+  sportId,
+  ownerId,
+  date,
+  price,
+  vacancy,
+  street,
+  number,
+  district,
+  city,
+  state,
+  zipCode,
+  complement,
+  setIsLoading
+) {
+  try {
+    setIsLoading(true);
+
+    const url = '/post';
+    const body = {
+      post: {
+        title,
+        describe,
+        sportId,
+        ownerId,
+        date,
+        price,
+        vacancy,
+      },
+      address: {
+        street,
+        number,
+        district,
+        city,
+        state,
+        zipCode,
+        complement,
+      },
+    };
+
+    const result = await api.post(url, body);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function getPostByStatus(postStatus, setIsLoading) {
   try {
     setIsLoading(true);
@@ -246,6 +303,24 @@ export async function deleteComment(id) {
   try {
     const url = `/comment/${id}`;
     const result = await api.delete(url);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
+/* ROUTES SPORT */
+
+export async function getSports() {
+  try {
+    const url = `/sport`;
+    const result = await api.get(url);
 
     return result;
   } catch (error) {

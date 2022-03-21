@@ -1,49 +1,115 @@
 /* eslint consistent-return: off */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import Button from '@material-ui/core/Button';
 import { useStyles } from './styles';
 
 import { CustomTextField } from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
+import { getSports, createPost } from '../../api';
+import { fullDatetime } from '../../utils/dateFormat';
+import Dialog from '../SimpleDialogSport';
 import Spinner from '../spinnerLoading';
 
 import '../loginForm/loginForm.css';
 
-export default function RegisterForm() {
+export default function RegisterForm({ ownerId }) {
   const style = useStyles();
 
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [date, setDate] = useState('');
-  const [vacancy, setVacancy] = useState('');
-  const [sport, setSport] = useState('');
-  const [isLoading /* , setIsLoading */] = useState(false);
+  const [describe, setDescribe] = useState('');
+  const [price, setPrice] = useState(0);
+  const [date, setDate] = useState(fullDatetime(new Date()));
+  const [selectedSport, setSelectedSport] = useState('Escolha um esporte');
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState();
+  const [sports, setSports] = useState([]);
+  const [fullSports, setFullSports] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [vacancy, setVacancy] = useState(1);
+
+  const [street, setStreet] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [district, setDistrict] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [number, setNumber] = useState('');
+  const [complement, setComplement] = useState('');
 
   const [errorTitle, setErrorTitle] = useState(false);
-  const [errorDescription, setErrorDescription] = useState(false);
-  const [errorPrice, setErrorPrice] = useState(false);
   const [errorDate, setErrorDate] = useState(false);
   const [errorVacancy, setErrorVacancy] = useState(false);
-  const [errorSport, setErrorSport] = useState(false);
 
-  const validatePrice = () => {
-    const validated = !price || price === '';
-    setErrorPrice(validated);
+  const [errorDistrict, setErrorDistrict] = useState(false);
+  const [errorState, setErrorState] = useState(false);
+  const [errorCity, setErrorCity] = useState(false);
+  const states = [
+    'AC',
+    'AL',
+    'AP',
+    'AM',
+    'BA',
+    'CE',
+    'DF',
+    'ES',
+    'GO',
+    'MA',
+    'MT',
+    'MS',
+    'MG',
+    'PA',
+    'PB',
+    'PR',
+    'PE',
+    'PI',
+    'RJ',
+    'RN',
+    'RS',
+    'RO',
+    'RR',
+    'SC',
+    'SP',
+    'SE',
+    'TO',
+  ];
 
-    return !validated;
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
   };
 
+  const handleCloseDialog = (value) => {
+    setOpenDialog(false);
+    setSelectedSport(value);
+  };
+
+  useEffect(async () => {
+    const result = await getSports();
+    if (result) {
+      setFullSports(result.data);
+      setSports(result.data.map((sport) => sport.name));
+    }
+  }, []);
+
+  useEffect(async () => {
+    if (fullSports.length > 0) {
+      const fullSport = fullSports.find((sport) => sport.name === selectedSport);
+      setSelectedId(fullSport?.id);
+    }
+  }, [selectedSport]);
+
   const validateVacancy = () => {
-    const validated = !vacancy || vacancy === '';
+    const validated = !vacancy || vacancy === '' || vacancy < 1;
     setErrorVacancy(validated);
 
     return !validated;
   };
 
   const validateSport = () => {
-    const validated = !sport || sport === '';
-    setErrorSport(validated);
+    const validated =
+      !selectedSport || selectedSport.trim() === '' || selectedSport === 'Escolha um esporte';
+
+    if (validated) toast.error('Escolha um esporte!');
 
     return !validated;
   };
@@ -55,35 +121,53 @@ export default function RegisterForm() {
     return !validated;
   };
 
-  const validateDescription = () => {
-    const validated = !description || description === '';
-    setErrorDescription(validated);
-
-    return !validated;
-  };
-
-  const validatePhone = () => {
+  const validateDate = () => {
     const validated = !date || date === '';
     setErrorDate(validated);
 
     return !validated;
   };
 
+  const validateDistrict = () => {
+    const validated = !district || district.trim() === '';
+    setErrorDistrict(validated);
+
+    return !validated;
+  };
+  const validateState = () => {
+    let validated = !state || state === '';
+    if (!validated) {
+      setState((prev) => prev.toUpperCase());
+      validated = !states.includes(state);
+    }
+
+    setErrorState(validated);
+
+    return !validated;
+  };
+  const validateCity = () => {
+    const validated = !city || city.trim() === '';
+    setErrorCity(validated);
+
+    return !validated;
+  };
+
   const validateInputs = () => {
-    validatePrice();
     validateVacancy();
-    validateSport();
     validateTitle();
-    validateDescription();
-    validatePhone();
+    validateDate();
+    validateState();
+    validateDistrict();
+    validateCity();
 
     return (
-      validatePrice() &&
       validateVacancy() &&
       validateSport() &&
       validateTitle() &&
-      validateDescription() &&
-      validatePhone()
+      validateDate() &&
+      validateState() &&
+      validateDistrict() &&
+      validateCity()
     );
   };
 
@@ -95,42 +179,71 @@ export default function RegisterForm() {
     return true;
   };
 
-  const registerRequest = async () => {
-    auth();
-    // if (auth()) {
-    //   const resultRegister = await createUser(
-    //     title,
-    //     description,
-    //     date,
-    //     price,
-    //     vacancy,
-    //     setIsLoading
-    //   );
-    //   if (resultRegister) {
-    //     const resultLogin = await login(price, password, setIsLoading);
-    //     if (resultLogin) {
-    //       const { token, user } = resultLogin.data;
-    //       await localStorage.setItem('letsplay_token', token);
-    //       toast(`Bem-vindo ${user.name}!`);
-    //       window.location.replace('/home');
-    //     }
-    //   }
-    // }
+  const clearAllFields = () => {
+    setTitle('');
+    setDescribe('');
+    setPrice(0);
+    setDate(fullDatetime(new Date()));
+    setSelectedSport('Escolha um esporte');
+    setOpenDialog(false);
+    setSelectedId('');
+    setVacancy(1);
+
+    setStreet('');
+    setZipCode('');
+    setDistrict('');
+    setState('');
+    setCity('');
+    setNumber('');
+    setComplement('');
+
+    setErrorTitle(false);
+    setErrorDate(false);
+    setErrorVacancy(false);
+
+    setErrorDistrict(false);
+    setErrorState(false);
+    setErrorCity(false);
+  };
+
+  const createPostRequest = async () => {
+    if (auth()) {
+      const result = await createPost(
+        title,
+        describe,
+        selectedId,
+        ownerId,
+        date,
+        price,
+        vacancy,
+        street,
+        number,
+        district,
+        city,
+        state,
+        zipCode,
+        complement,
+        setIsLoading
+      );
+      if (result) {
+        toast.success(`Post criado com sucesso!`);
+        clearAllFields();
+      }
+    }
   };
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      registerRequest();
+      createPostRequest();
     }
   };
 
   return (
     <>
       <form className={style.form}>
-        Criar Post
-        <div className={`${style.twoFields} ${style.bottomSpace}`}>
+        <div className={`${style.multiFields} ${style.bottomSpace}`}>
           <CustomTextField
-            className={style.shortField}
+            className={style.largeField}
             label="Título*"
             error={errorTitle}
             variant="outlined"
@@ -138,56 +251,136 @@ export default function RegisterForm() {
             onKeyDown={handleKeyDown}
             onChange={(e) => setTitle(e.target.value)}
           />
+          <div className={style.shortField}>
+            <Button variant="outlined" onClick={handleClickOpenDialog}>
+              {selectedSport}
+            </Button>
+            <Dialog
+              selectedValue={selectedSport}
+              open={openDialog}
+              onClose={handleCloseDialog}
+              sports={sports}
+            />
+          </div>
+        </div>
+        <div className={`${style.multiFields} ${style.bottomSpace}`}>
           <CustomTextField
-            className={style.shortField}
-            label="Descrição*"
-            error={errorDescription}
+            className={style.threeField}
+            label="Data do evento*"
+            error={errorDate}
+            defaultValue={date}
+            type="datetime-local"
             variant="outlined"
-            value={description}
+            value={date}
             onKeyDown={handleKeyDown}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => setDate(e.target.value)}
+          />
+          <CustomTextField
+            className={style.threeField}
+            label="Valor"
+            defaultValue={price}
+            type="number"
+            variant="outlined"
+            value={price}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+          <CustomTextField
+            className={style.threeField}
+            label="Vagas*"
+            defaultValue={vacancy}
+            error={errorVacancy}
+            type="number"
+            variant="outlined"
+            value={vacancy}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setVacancy(e.target.value)}
           />
         </div>
         <CustomTextField
           className={style.bottomSpace}
-          label="Price"
-          error={errorPrice}
+          multiline
+          minRows={3}
+          label="Descrição"
           variant="outlined"
-          value={price}
+          value={describe}
           onKeyDown={handleKeyDown}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => setDescribe(e.target.value)}
         />
-        <CustomTextField
-          className={style.bottomSpace}
-          label="Data do evento*"
-          error={errorDate}
-          variant="outlined"
-          value={date}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setDate(e.target.value)}
-        />
-        <CustomTextField
-          className={style.bottomSpace}
-          label="Vagas*"
-          error={errorVacancy}
-          variant="outlined"
-          value={vacancy}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setVacancy(e.target.value)}
-        />
-        <CustomTextField
-          className={style.bottomSpace}
-          label="Esporte*"
-          error={errorSport}
-          variant="outlined"
-          value={sport}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setSport(e.target.value)}
-        />
-        <CustomButton size="large" className={style.bottomSpace} onClick={registerRequest}>
+        <div className={`${style.multiFields} ${style.bottomSpace}`}>
+          <CustomTextField
+            className={style.largeField}
+            label="Rua/Avenida"
+            variant="outlined"
+            type="text"
+            value={street}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setStreet(e.target.value)}
+          />
+          <CustomTextField
+            className={style.shortField}
+            label="Número"
+            type="text"
+            variant="outlined"
+            value={number}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setNumber(e.target.value)}
+          />
+        </div>
+        <div className={`${style.multiFields} ${style.bottomSpace}`}>
+          <CustomTextField
+            className={style.threeField}
+            label="Bairro*"
+            error={errorDistrict}
+            type="text"
+            variant="outlined"
+            value={district}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setDistrict(e.target.value)}
+          />
+          <CustomTextField
+            className={style.threeField}
+            label="City*"
+            error={errorCity}
+            type="text"
+            variant="outlined"
+            value={city}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setCity(e.target.value)}
+          />
+          <CustomTextField
+            className={style.threeField}
+            label="Estado(Sigla)*"
+            error={errorState}
+            type="text"
+            variant="outlined"
+            value={state}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setState(e.target.value)}
+          />
+        </div>
+        <div className={`${style.multiFields} ${style.bottomSpace}`}>
+          <CustomTextField
+            className={style.shortField}
+            label="CEP"
+            variant="outlined"
+            value={zipCode}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setZipCode(e.target.value)}
+          />
+          <CustomTextField
+            className={style.largeField}
+            label="Complemento"
+            variant="outlined"
+            value={complement}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setComplement(e.target.value)}
+          />
+        </div>
+        <CustomButton size="large" className={style.bottomSpace} onClick={createPostRequest}>
           CRIAR POST
         </CustomButton>
-        <div className="spinner">{isLoading && <Spinner />}</div>
+        <div className={style.spinner}>{isLoading && <Spinner />}</div>
       </form>
     </>
   );
