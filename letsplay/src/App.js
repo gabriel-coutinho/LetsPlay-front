@@ -11,6 +11,7 @@ import User from './pages/user';
 import EditUser from './pages/editUser';
 import ChangePassword from './pages/changePassword';
 import Requests from './pages/requests';
+import UserById from './pages/userById';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
 import { LoggedUserProvider } from './utils/loggedUserProvider';
@@ -52,6 +53,9 @@ function App() {
               </Route>
               <Route exact path="/requests">
                 <Requests />
+              </Route>
+              <Route path="/user/:idUser">
+                <UserById />
               </Route>
               <Route exact path="/*">
                 <NotFound />

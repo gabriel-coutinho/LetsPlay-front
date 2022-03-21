@@ -5,7 +5,7 @@ import { useStyles } from './styles';
 import Spinner from '../spinnerLoading';
 import { CustomTextField } from '../styles/inputs.style';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
-import { CustomButton } from '../styles/button.style';
+import { CustomButton, CancelButton } from '../styles/button.style';
 import { updateUser } from '../../api';
 
 export default function EditUserForm() {
@@ -88,6 +88,8 @@ export default function EditUserForm() {
     }
   };
 
+  const handleCancel = () => history.push('/me');
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       saveEdit();
@@ -141,9 +143,18 @@ export default function EditUserForm() {
           onKeyDown={handleKeyDown}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
-        <CustomButton size="medium" className={style.bottomSpace} onClick={saveEdit}>
-          Salvar Alterações
-        </CustomButton>
+        <div className={style.multiFields}>
+          <CustomButton size="medium" className={style.twoField} onClick={saveEdit}>
+            Salvar Alterações
+          </CustomButton>
+          <CancelButton
+            size="medium"
+            className={`${style.twoField} ${style.cancelButton}`}
+            onClick={handleCancel}
+          >
+            Cancelar
+          </CancelButton>
+        </div>
         <div className={style.spinner}>{isLoading && <Spinner />}</div>
       </form>
     </>

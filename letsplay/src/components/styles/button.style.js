@@ -11,6 +11,16 @@ export const CustomButton = withStyles({
   },
 })(Button);
 
+export const CancelButton = withStyles({
+  root: {
+    color: '#F9F7F7',
+    backgroundColor: '#e61919',
+    '&:hover': {
+      backgroundColor: '#cc0000',
+    },
+  },
+})(Button);
+
 export const CommentButton = withStyles({
   root: {
     color: '#F9F7F7',

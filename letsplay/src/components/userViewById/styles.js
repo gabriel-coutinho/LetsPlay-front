@@ -1,20 +1,18 @@
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  bottomSpace: {
-    marginBottom: '30px',
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    margin: '2%',
+    width: '90%',
+    height: '90%',
   },
 
   spinner: {
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-
-  form: {
-    margin: '3%',
-    flexDirection: 'column',
-    display: 'flex',
-    width: '90%',
   },
 
   multiFields: {
@@ -25,9 +23,5 @@ export const useStyles = makeStyles({
 
   twoField: {
     width: '48%',
-  },
-
-  cancelButton: {
-    backgroudColor: '#e61919',
   },
 });

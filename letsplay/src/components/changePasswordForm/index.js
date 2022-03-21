@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Spinner from '../spinnerLoading';
 import { useStyles } from './styles';
 import { CustomTextField } from '../styles/inputs.style';
-import { CustomButton } from '../styles/button.style';
+import { CustomButton, CancelButton } from '../styles/button.style';
 import { changePassword } from '../../api';
 
 export default function ChangePasswordForm() {
@@ -91,9 +91,9 @@ export default function ChangePasswordForm() {
           <CustomButton size="medium" className={style.twoField} onClick={saveEdit}>
             Salvar Alterações
           </CustomButton>
-          <CustomButton size="medium" className={style.twoField} onClick={handleCancel}>
+          <CancelButton size="medium" className={style.twoField} onClick={handleCancel}>
             Cancelar
-          </CustomButton>
+          </CancelButton>
         </div>
         <div className={style.spinner}>{isLoading && <Spinner />}</div>
       </form>

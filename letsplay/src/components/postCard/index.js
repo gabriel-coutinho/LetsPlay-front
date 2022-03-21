@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Card from '@material-ui/core/Card';
@@ -11,6 +12,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import ChatIcon from '@material-ui/icons/Chat';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -25,6 +27,7 @@ import { useStyles } from './styles';
 import { CommentsContext } from './contexts';
 
 export default function PostCard({ post }) {
+  const history = useHistory();
   const style = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [myPost, setMyPost] = useState(false);
@@ -87,6 +90,8 @@ export default function PostCard({ post }) {
     updatePostsInHome();
   };
 
+  const handleInfoUser = () => history.push(`/user/${owner.id}`);
+
   return (
     <div>
       {!isLoading && (
@@ -138,6 +143,9 @@ export default function PostCard({ post }) {
           <CardActions disableSpacing>
             <IconButton aria-label="request">
               <AddIcon />
+            </IconButton>
+            <IconButton onClick={handleInfoUser} aria-label="info user">
+              <InfoOutlinedIcon />
             </IconButton>
             <IconButton
               className={style.expand}

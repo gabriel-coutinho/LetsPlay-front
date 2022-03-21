@@ -191,6 +191,22 @@ export async function getLoggedUser() {
   }
 }
 
+export async function getUserById(id) {
+  try {
+    const url = `/user/${id}`;
+    const result = await api.get(url);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
 /* ROUTES POST */
 export async function createPost(
   title,
