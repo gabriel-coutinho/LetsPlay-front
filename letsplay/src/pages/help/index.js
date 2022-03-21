@@ -25,7 +25,9 @@ export default function Help() {
         Qualquer dúvida ou sugestão estou a disposição, pode entrar em contato através do email{' '}
         <b>suporte.letsplayapp@gmail.com</b>
       </Typography>
-      <Typography>Gabriel Coutinho</Typography>
+      <Typography>
+        <b>Gabriel Coutinho</b>
+      </Typography>
     </div>
   );
 }

@@ -76,7 +76,7 @@ export default function NavBar() {
             <Tab
               icon={<NotificationsNoneOutlinedIcon fontSize="medium" />}
               onClick={() => {
-                history.push('/register');
+                history.push('/requests');
               }}
               label="NOTIFICAÇÕES"
             />

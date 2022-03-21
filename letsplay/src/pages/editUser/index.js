@@ -1,5 +1,6 @@
 import React from 'react';
+import EditUserForm from '../../components/editUserForm';
 
 export default function EditUser() {
-  return <h2>TESTE EDIT USER</h2>;
+  return <EditUserForm />;
 }

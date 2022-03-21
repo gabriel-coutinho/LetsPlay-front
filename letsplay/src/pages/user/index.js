@@ -1,5 +1,6 @@
 import React from 'react';
+import UserView from '../../components/userView';
 
-export default function EditUser() {
-  return <h2>TESTE USER</h2>;
+export default function User() {
+  return <UserView />;
 }

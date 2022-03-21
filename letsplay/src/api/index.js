@@ -98,6 +98,35 @@ export async function createUser(name, lastName, phoneNumber, email, password, s
   }
 }
 
+export async function updateUser(id, name, lastName, phoneNumber, email, setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/user/${id}`;
+    const body = {
+      user: {
+        name,
+        lastName,
+        phoneNumber,
+        email,
+      },
+    };
+
+    const result = await api.put(url, body);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function forgetPassword(email, setIsLoading) {
   try {
     setIsLoading(true);

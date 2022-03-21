@@ -129,7 +129,7 @@ function ForgetPassword({ setFlip }) {
   const validatePasswords = () => {
     validatePassword();
     validateConfirmPassword();
-    if (validatePassword() && validateConfirmPassword() && !samePasswords) {
+    if (validatePassword() && validateConfirmPassword() && !samePasswords()) {
       toast.error('As senhas devem ser iguais!');
     }
     return validatePassword() && validateConfirmPassword() && samePasswords();
