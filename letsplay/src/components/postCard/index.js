@@ -33,7 +33,7 @@ export default function PostCard({ post }) {
   const [myPost, setMyPost] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const { loggedUser } = useContext(LoggedUserContext);
-  const { updatePostsInHome } = useContext(PostsContext);
+  const { updatePosts } = useContext(PostsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [commentIcon, setCommentIcon] = useState(<ChatIcon />);
   const { sport } = post;
@@ -87,7 +87,7 @@ export default function PostCard({ post }) {
   const handleDelete = async () => {
     setAnchorEl(null);
     await deletePost(post.id);
-    updatePostsInHome();
+    updatePosts();
   };
 
   const handleInfoUser = () => history.push(`/user/${owner.id}`);

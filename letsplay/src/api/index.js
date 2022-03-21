@@ -265,6 +265,26 @@ export async function createPost(
   }
 }
 
+export async function getMyPosts(setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/user/me/posts`;
+    const result = await api.get(url);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function getPostByStatus(postStatus, setIsLoading) {
   try {
     setIsLoading(true);

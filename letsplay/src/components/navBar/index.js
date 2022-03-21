@@ -8,6 +8,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import LibraryBooksOutlinedIcon from '@material-ui/icons/LibraryBooksOutlined';
 import NotificationsNoneOutlinedIcon from '@material-ui/icons/NotificationsNoneOutlined';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import IconLogo from '../icons/iconLogo';
@@ -72,6 +73,13 @@ export default function NavBar() {
                 history.push('/newPost');
               }}
               label="NOVO POST"
+            />
+            <Tab
+              icon={<LibraryBooksOutlinedIcon fontSize="medium" />}
+              onClick={() => {
+                history.push('/myPosts');
+              }}
+              label="MEUS POSTS"
             />
             <Tab
               icon={<NotificationsNoneOutlinedIcon fontSize="medium" />}

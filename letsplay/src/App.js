@@ -12,6 +12,7 @@ import EditUser from './pages/editUser';
 import ChangePassword from './pages/changePassword';
 import Requests from './pages/requests';
 import UserById from './pages/userById';
+import MyPosts from './pages/myPosts';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
 import { LoggedUserProvider } from './utils/loggedUserProvider';
@@ -54,8 +55,11 @@ function App() {
               <Route exact path="/requests">
                 <Requests />
               </Route>
-              <Route path="/user/:idUser">
+              <Route exact path="/user/:idUser">
                 <UserById />
+              </Route>
+              <Route exact path="/myPosts">
+                <MyPosts />
               </Route>
               <Route exact path="/*">
                 <NotFound />
