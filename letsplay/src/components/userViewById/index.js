@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Spinner from '../spinnerLoading';
 import { useStyles } from './styles';
 import { getUserById } from '../../api';
+import { CustomButton } from '../styles/button.style';
 
 export default function UserView({ idUser }) {
+  const history = useHistory();
   const style = useStyles();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState('');
@@ -24,6 +27,8 @@ export default function UserView({ idUser }) {
     }
   }, []);
 
+  const goToPostsByUserId = () => history.push(`/user/${idUser}/posts`);
+
   return (
     <form className={style.root}>
       <Typography paragraph variant="h4">
@@ -41,6 +46,9 @@ export default function UserView({ idUser }) {
       <Typography paragraph>
         <b>Telefone:</b> {phoneNumber}
       </Typography>
+      <CustomButton size="medium" onClick={goToPostsByUserId}>
+        Ver Posts
+      </CustomButton>
       <div className={style.spinner}>{isLoading && <Spinner />}</div>
     </form>
   );

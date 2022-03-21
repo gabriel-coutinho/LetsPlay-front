@@ -13,6 +13,7 @@ import ChangePassword from './pages/changePassword';
 import Requests from './pages/requests';
 import UserById from './pages/userById';
 import MyPosts from './pages/myPosts';
+import PostsByUserId from './pages/postsByUserId';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
 import { LoggedUserProvider } from './utils/loggedUserProvider';
@@ -60,6 +61,9 @@ function App() {
               </Route>
               <Route exact path="/myPosts">
                 <MyPosts />
+              </Route>
+              <Route exact path="/user/:idUser/posts">
+                <PostsByUserId />
               </Route>
               <Route exact path="/*">
                 <NotFound />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PostCard from '../../components/postCard';
-import { getPostByStatus } from '../../api';
+import { getPostsByStatus } from '../../api';
 import Spinner from '../../components/spinnerLoading';
 import { useStyles } from './styles';
 import { PostsContext } from './contexts';
@@ -13,7 +13,7 @@ function Home() {
   const [postStatus] = useState('OPEN');
 
   useEffect(async () => {
-    const response = await getPostByStatus(postStatus, setIsLoading);
+    const response = await getPostsByStatus(postStatus, setIsLoading);
     setPostsHome(response?.data);
   }, [postStatus, shouldUpdatePosts]);
 

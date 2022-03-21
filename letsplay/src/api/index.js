@@ -285,7 +285,27 @@ export async function getMyPosts(setIsLoading) {
   }
 }
 
-export async function getPostByStatus(postStatus, setIsLoading) {
+export async function getPostsByUserId(ownerId, setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/user/${ownerId}/posts`;
+    const result = await api.get(url);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
+export async function getPostsByStatus(postStatus, setIsLoading) {
   try {
     setIsLoading(true);
 
