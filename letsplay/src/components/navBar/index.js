@@ -62,7 +62,7 @@ export default function NavBar() {
             <Tab
               icon={<AccountCircleOutlinedIcon fontSize="large" />}
               onClick={() => {
-                history.push('/register');
+                history.push('/user');
               }}
             />
             <Tab
@@ -80,7 +80,7 @@ export default function NavBar() {
             <Tab
               icon={<HelpOutlineIcon fontSize="large" />}
               onClick={() => {
-                history.push('/register');
+                history.push('/help');
               }}
             />
           </Tabs>

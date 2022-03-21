@@ -6,6 +6,9 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
 import NewPost from './pages/newPost';
+import Help from './pages/help';
+import User from './pages/user';
+import EditUser from './pages/editUser';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
 import { LoggedUserProvider } from './utils/loggedUserProvider';
@@ -32,6 +35,15 @@ function App() {
               </Route>
               <Route exact path="/newPost">
                 <NewPost />
+              </Route>
+              <Route exact path="/help">
+                <Help />
+              </Route>
+              <Route exact path="/user">
+                <User />
+              </Route>
+              <Route exact path="/user/edit">
+                <EditUser />
               </Route>
               <Route exact path="/*">
                 <NotFound />
