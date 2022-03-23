@@ -53,18 +53,10 @@ export async function verifyCodeRequest(email, code, setIsLoading) {
 }
 
 export async function verifyToken() {
-  try {
-    const url = '/auth/verifyToken';
-    const result = await api.get(url);
+  const url = '/auth/verifyToken';
+  const result = await api.get(url);
 
-    return result;
-  } catch (error) {
-    let msg = '';
-    if (error.response) msg = error.response.data.error;
-    else msg = 'Network failed';
-
-    toast.error(msg);
-  }
+  return result;
 }
 
 /* ROUTES USER */
@@ -176,19 +168,10 @@ export async function changePassword(newPassword, setIsLoading) {
 }
 
 export async function getLoggedUser() {
-  try {
-    const url = `/user/loggedUser`;
-    const result = await api.get(url);
+  const url = `/user/loggedUser`;
+  const result = await api.get(url);
 
-    return result;
-  } catch (error) {
-    let msg = '';
-
-    if (error.response) msg = error.response.data.error;
-    else msg = 'Network failed';
-
-    toast.error(msg);
-  }
+  return result;
 }
 
 export async function getUserById(id) {
@@ -265,6 +248,62 @@ export async function createPost(
   }
 }
 
+export async function updatePost(
+  id,
+  title,
+  describe,
+  sportId,
+  date,
+  price,
+  vacancy,
+  street,
+  number,
+  district,
+  city,
+  state,
+  zipCode,
+  complement,
+  setIsLoading
+) {
+  try {
+    setIsLoading(true);
+
+    const url = `/post/${id}`;
+    const body = {
+      post: {
+        title,
+        describe,
+        sportId,
+        date,
+        price,
+        vacancy,
+      },
+      address: {
+        street,
+        number,
+        district,
+        city,
+        state,
+        zipCode,
+        complement,
+      },
+    };
+
+    const result = await api.put(url, body);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function getMyPosts(setIsLoading) {
   try {
     setIsLoading(true);
@@ -305,6 +344,26 @@ export async function getPostsByUserId(ownerId, setIsLoading) {
   }
 }
 
+export async function getPostById(id, setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/post/${id}`;
+    const result = await api.get(url);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function getPostsByStatus(postStatus, setIsLoading) {
   try {
     setIsLoading(true);
@@ -319,6 +378,8 @@ export async function getPostsByStatus(postStatus, setIsLoading) {
     let msg = '';
     if (error.response) msg = error.response.data.error;
     else msg = 'Network failed';
+
+    msg.concat(' Faça login novamente.');
 
     setIsLoading(false);
     toast.error(msg);

@@ -1,6 +1,6 @@
 /* eslint consistent-return: off */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -8,27 +8,29 @@ import { useStyles } from './styles';
 
 import { CustomTextField } from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
-import { getSports, createPost } from '../../api';
-import { fullDatetimeNewPost } from '../../utils/dateFormat';
+import { getSports, updatePost } from '../../api';
+import { fullDatetime } from '../../utils/dateFormat';
+import { PostContext } from '../../pages/editPost/contexts';
 import Dialog from '../SimpleDialogSport';
 import Spinner from '../spinnerLoading';
 
 import '../loginForm/loginForm.css';
 
-export default function RegisterForm({ ownerId }) {
+export default function EditPostForm() {
   const style = useStyles();
 
+  const { postById } = useContext(PostContext);
   const [title, setTitle] = useState('');
   const [describe, setDescribe] = useState('');
-  const [price, setPrice] = useState(0);
-  const [date, setDate] = useState(fullDatetimeNewPost(new Date()));
+  const [price, setPrice] = useState('');
+  const [date, setDate] = useState('');
   const [selectedSport, setSelectedSport] = useState('Escolha um esporte');
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const [sports, setSports] = useState([]);
   const [fullSports, setFullSports] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [vacancy, setVacancy] = useState(1);
+  const [vacancy, setVacancy] = useState('');
 
   const [street, setStreet] = useState('');
   const [zipCode, setZipCode] = useState('');
@@ -91,6 +93,24 @@ export default function RegisterForm({ ownerId }) {
   useEffect(() => {
     if (vacancy < 1) setVacancy(1);
   }, [vacancy]);
+
+  useEffect(() => {
+    if (postById) {
+      setTitle(postById.title);
+      setDescribe(postById.describe);
+      setPrice(postById.price);
+      setDate(fullDatetime(postById.date));
+      setVacancy(postById.vacancy);
+      setSelectedSport(postById.sport?.name);
+      setStreet(postById.address?.street);
+      setNumber(postById.address?.number);
+      setDistrict(postById.address?.district);
+      setCity(postById.address?.city);
+      setState(postById.address?.state);
+      setZipCode(postById.address?.zipCode);
+      setComplement(postById.address?.complement);
+    }
+  }, [postById]);
 
   useEffect(async () => {
     const result = await getSports();
@@ -188,62 +208,53 @@ export default function RegisterForm({ ownerId }) {
     return true;
   };
 
-  const clearAllFields = () => {
-    setTitle('');
-    setDescribe('');
-    setPrice(0);
-    setDate(fullDatetimeNewPost(new Date()));
-    setSelectedSport('Escolha um esporte');
-    setOpenDialog(false);
-    setSelectedId('');
-    setVacancy(1);
+  const hasChanges = () =>
+    title !== postById.title ||
+    describe !== postById.describe ||
+    price !== postById.price ||
+    date !== postById.date ||
+    vacancy !== postById.vacancy ||
+    selectedSport !== postById.sport?.name ||
+    street !== postById.address?.street ||
+    number !== postById.address?.number ||
+    district !== postById.address?.district ||
+    city !== postById.address?.city ||
+    state !== postById.address?.state ||
+    zipCode !== postById.address?.zipCode ||
+    complement !== postById.address?.complement;
 
-    setStreet('');
-    setZipCode('');
-    setDistrict('');
-    setState('');
-    setCity('');
-    setNumber('');
-    setComplement('');
-
-    setErrorTitle(false);
-    setErrorDate(false);
-    setErrorVacancy(false);
-
-    setErrorDistrict(false);
-    setErrorState(false);
-    setErrorCity(false);
-  };
-
-  const createPostRequest = async () => {
+  const updatePostRequest = async () => {
     if (auth()) {
-      const result = await createPost(
-        title,
-        describe,
-        selectedId,
-        ownerId,
-        date,
-        price,
-        vacancy,
-        street,
-        number,
-        district,
-        city,
-        state,
-        zipCode,
-        complement,
-        setIsLoading
-      );
-      if (result) {
-        toast.success(`Post criado com sucesso!`);
-        clearAllFields();
+      if (hasChanges()) {
+        const result = await updatePost(
+          postById.id,
+          title,
+          describe,
+          selectedId,
+          date,
+          price,
+          vacancy,
+          street,
+          number,
+          district,
+          city,
+          state,
+          zipCode,
+          complement,
+          setIsLoading
+        );
+        if (result) {
+          toast.success(`Post atualizado com sucesso!`);
+        }
+      } else {
+        toast.success(`Post atualizado com sucesso! SEM MUDANCA`);
       }
     }
   };
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      createPostRequest();
+      updatePostRequest();
     }
   };
 
@@ -278,7 +289,6 @@ export default function RegisterForm({ ownerId }) {
             className={style.threeField}
             label="Data do evento*"
             error={errorDate}
-            defaultValue={date}
             type="datetime-local"
             variant="outlined"
             value={date}
@@ -288,7 +298,6 @@ export default function RegisterForm({ ownerId }) {
           <CustomTextField
             className={style.threeField}
             label="Valor"
-            defaultValue={price}
             type="number"
             variant="outlined"
             value={price}
@@ -298,7 +307,6 @@ export default function RegisterForm({ ownerId }) {
           <CustomTextField
             className={style.threeField}
             label="Vagas*"
-            defaultValue={vacancy}
             error={errorVacancy}
             type="number"
             variant="outlined"
@@ -388,8 +396,8 @@ export default function RegisterForm({ ownerId }) {
             onChange={(e) => setComplement(e.target.value)}
           />
         </div>
-        <CustomButton size="large" className={style.bottomSpace} onClick={createPostRequest}>
-          CRIAR POST
+        <CustomButton size="large" className={style.bottomSpace} onClick={updatePostRequest}>
+          ATUALIZAR POST
         </CustomButton>
         <div className={style.spinner}>{isLoading && <Spinner />}</div>
       </form>

@@ -82,6 +82,7 @@ export default function PostCard({ post }) {
 
   const handleEdit = () => {
     setAnchorEl(null);
+    history.push(`/editPost/${post.id}`);
   };
 
   const handleDelete = async () => {

@@ -1,7 +1,7 @@
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
@@ -14,20 +14,30 @@ import Requests from './pages/requests';
 import UserById from './pages/userById';
 import MyPosts from './pages/myPosts';
 import PostsByUserId from './pages/postsByUserId';
+import EditPost from './pages/editPost';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
 import { LoggedUserProvider } from './utils/loggedUserProvider';
+import { verifyToken } from './api';
 
 toast.configure();
 function App() {
   const token = localStorage.getItem('letsplay_token');
+  const [validToken, setValidToken] = useState(false);
+
+  useEffect(async () => {
+    if (token) {
+      const result = await verifyToken(token);
+      if (result) setValidToken(true);
+    }
+  }, [token]);
 
   return (
     <>
       <Router>
         <main>
           <LoggedUserProvider>
-            {token && <NavBar />}
+            {validToken && <NavBar />}
             <Switch>
               <Route exact path="/">
                 <Login />
@@ -39,34 +49,38 @@ function App() {
                 <Home />
               </Route>
               <Route exact path="/newPost">
-                <NewPost />
+                {!validToken ? <Redirect to="/" /> : <NewPost />}
               </Route>
               <Route exact path="/help">
-                <Help />
+                {!validToken ? <Redirect to="/" /> : <Help />}
               </Route>
               <Route exact path="/me">
-                <User />
+                {!validToken ? <Redirect to="/" /> : <User />}
               </Route>
               <Route exact path="/me/edit">
-                <EditUser />
+                {!validToken ? <Redirect to="/" /> : <EditUser />}
               </Route>
               <Route exact path="/me/changePassword">
-                <ChangePassword />
+                {!validToken ? <Redirect to="/" /> : <ChangePassword />}
               </Route>
               <Route exact path="/requests">
-                <Requests />
+                {!validToken ? <Redirect to="/" /> : <Requests />}
               </Route>
               <Route exact path="/user/:idUser">
-                <UserById />
+                {!validToken ? <Redirect to="/" /> : <UserById />}
               </Route>
               <Route exact path="/myPosts">
-                <MyPosts />
+                {!validToken ? <Redirect to="/" /> : <MyPosts />}
               </Route>
               <Route exact path="/user/:idUser/posts">
-                <PostsByUserId />
+                {!validToken ? <Redirect to="/" /> : <PostsByUserId />}
+              </Route>
+              <Route exact path="/editPost/:idPost">
+                {/* {!validToken ? < Redirect to="/" /> : <EditPost />} */}
+                <EditPost />
               </Route>
               <Route exact path="/*">
-                <NotFound />
+                {!validToken ? <Redirect to="/" /> : <NotFound />}
               </Route>
             </Switch>
           </LoggedUserProvider>
