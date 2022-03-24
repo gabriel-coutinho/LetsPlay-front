@@ -304,12 +304,12 @@ export async function updatePost(
   }
 }
 
-export async function getMyPosts(setIsLoading) {
+export async function getMyPosts(page, setIsLoading) {
   try {
     setIsLoading(true);
 
     const url = `/user/me/posts`;
-    const result = await api.get(url);
+    const result = await api.get(url, { params: { page, pageSize: 10 } });
 
     setIsLoading(false);
 
@@ -324,12 +324,12 @@ export async function getMyPosts(setIsLoading) {
   }
 }
 
-export async function getPostsByUserId(ownerId, setIsLoading) {
+export async function getPostsByUserId(ownerId, page, setIsLoading) {
   try {
     setIsLoading(true);
 
     const url = `/user/${ownerId}/posts`;
-    const result = await api.get(url);
+    const result = await api.get(url, { params: { page, pageSize: 10 } });
 
     setIsLoading(false);
 
@@ -364,12 +364,12 @@ export async function getPostById(id, setIsLoading) {
   }
 }
 
-export async function getPostsByStatus(postStatus, setIsLoading) {
+export async function getPostsByStatus(status, page, setIsLoading) {
   try {
     setIsLoading(true);
 
-    const url = `/post?status=${postStatus}`;
-    const result = await api.get(url);
+    const url = `/post`;
+    const result = await api.get(url, { params: { status, page, pageSize: 10 } });
 
     setIsLoading(false);
 

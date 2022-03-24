@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import PostCard from '../../components/postCard';
 import { getMyPosts } from '../../api';
 import Spinner from '../../components/spinnerLoading';
@@ -9,29 +10,45 @@ import { PostsContext } from '../home/contexts';
 function MyPosts() {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(false);
+  const [pageNumber, setPageNumber] = useState(2);
+  const [hasMore, setHasMore] = useState(true);
   const { loggedUser } = useContext(LoggedUserContext);
   const [myPosts, setMyPosts] = useState([]);
   const [shouldUpdatePosts, setShouldUpdatePosts] = useState(false);
 
   useEffect(async () => {
-    const response = await getMyPosts(setIsLoading);
-    if (response) setMyPosts(response?.data);
+    const response = await getMyPosts(1, setIsLoading);
+    if (response) setMyPosts(response?.data.rows);
   }, [loggedUser, shouldUpdatePosts]);
 
   const updatePosts = () => {
     setShouldUpdatePosts(!shouldUpdatePosts);
   };
 
+  const getPosts = async () => {
+    const result = await getMyPosts(pageNumber, setIsLoading);
+    return result?.data;
+  };
+
+  const getData = async () => {
+    const newPosts = await getPosts();
+    setMyPosts((prevPosts) => [...prevPosts, ...newPosts.rows]);
+    setHasMore(newPosts.pages > pageNumber);
+    setPageNumber((prevNumber) => prevNumber + 1);
+  };
+
   return (
     <>
       <div className={classes.spinner}>{isLoading && <Spinner />}</div>
-      <PostsContext.Provider value={{ updatePosts }}>
-        <div className={classes.root}>
-          {myPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      </PostsContext.Provider>
+      <div className={classes.root}>
+        <InfiniteScroll dataLength={myPosts.length} next={getData} hasMore={hasMore}>
+          <PostsContext.Provider value={{ updatePosts }}>
+            {myPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </PostsContext.Provider>
+        </InfiniteScroll>
+      </div>
     </>
   );
 }
