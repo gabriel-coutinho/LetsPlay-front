@@ -1,9 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import MenuItem from '@material-ui/core/MenuItem';
 import { useStyles } from './styles';
 import Spinner from '../spinnerLoading';
-import { CustomTextField } from '../styles/inputs.style';
+import {
+  CustomTextField,
+  CustomFormControlField,
+  CustomInputLabelField,
+  CustomSelectField,
+} from '../styles/inputs.style';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
 import { CustomButton, CancelButton } from '../styles/button.style';
 import { updateUser } from '../../api';
@@ -23,7 +29,7 @@ export default function EditUserForm() {
   const [errorLastName, setErrorLastName] = useState(false);
   const [errorGender, setErrorGender] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
-  const [errorPhoneNumber, setErrorPhoneNumnber] = useState(false);
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
 
   const validateName = () => {
     const validated = !name || name.trim() === '';
@@ -54,7 +60,7 @@ export default function EditUserForm() {
   };
   const validatePhoneNumber = () => {
     const validated = !phoneNumber || phoneNumber.trim() === '';
-    setErrorPhoneNumnber(validated);
+    setErrorPhoneNumber(validated);
 
     return !validated;
   };
@@ -63,15 +69,15 @@ export default function EditUserForm() {
     validateName();
     validateLastName();
     validateGender();
-    validateEmail();
     validatePhoneNumber();
+    validateEmail();
 
     return (
       validateName() &&
       validateLastName() &&
       validateGender() &&
-      validateEmail() &&
-      validatePhoneNumber()
+      validatePhoneNumber() &&
+      validateEmail()
     );
   };
 
@@ -79,8 +85,8 @@ export default function EditUserForm() {
     name !== loggedUser.name ||
     lastName !== loggedUser.lastName ||
     gender !== loggedUser.gender ||
-    email !== loggedUser.email ||
-    phoneNumber !== loggedUser.phoneNumber;
+    phoneNumber !== loggedUser.phoneNumber ||
+    email !== loggedUser.email;
 
   const saveEdit = async () => {
     if (validateInputs()) {
@@ -90,8 +96,8 @@ export default function EditUserForm() {
           name,
           lastName,
           gender,
-          email,
           phoneNumber,
+          email,
           setIsLoading
         );
 
@@ -139,17 +145,23 @@ export default function EditUserForm() {
           onKeyDown={handleKeyDown}
           onChange={(e) => setLastName(e.target.value)}
         />
-        <CustomTextField
-          className={style.bottomSpace}
-          label="Gênero*"
-          type="text"
-          defaultValue={loggedUser.gender}
+        <CustomFormControlField
           error={errorGender}
           variant="outlined"
-          value={gender}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setGender(e.target.value)}
-        />
+          className={style.bottomSpace}
+        >
+          <CustomInputLabelField variant="outlined">Gênero</CustomInputLabelField>
+          <CustomSelectField
+            variant="outlined"
+            label="Gênero"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <MenuItem value="Masculino">Masculino</MenuItem>
+            <MenuItem value="Feminino">Feminino</MenuItem>
+            <MenuItem value="Outro">Outro</MenuItem>
+          </CustomSelectField>
+        </CustomFormControlField>
         <CustomTextField
           className={style.bottomSpace}
           label="Email*"

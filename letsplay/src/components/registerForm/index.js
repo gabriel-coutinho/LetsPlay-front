@@ -3,9 +3,14 @@
 import { toast } from 'react-toastify';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
 import { useStyles } from './styles';
-
-import { CustomTextField } from '../styles/inputs.style';
+import {
+  CustomTextField,
+  CustomSelectField,
+  CustomInputLabelField,
+  CustomFormControlField,
+} from '../styles/inputs.style';
 import { CustomButton } from '../styles/button.style';
 import { login, createUser } from '../../api';
 import Spinner from '../spinnerLoading';
@@ -196,15 +201,23 @@ export default function RegisterForm() {
             onKeyDown={handleKeyDown}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
-          <CustomTextField
-            className={style.shortField}
-            label="Gênero*"
+          <CustomFormControlField
             error={errorGender}
             variant="outlined"
-            value={gender}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => setGender(e.target.value)}
-          />
+            className={style.shortField}
+          >
+            <CustomInputLabelField variant="outlined">Gênero</CustomInputLabelField>
+            <CustomSelectField
+              variant="outlined"
+              label="Gênero"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              <MenuItem value="Masculino">Masculino</MenuItem>
+              <MenuItem value="Feminino">Feminino</MenuItem>
+              <MenuItem value="Outro">Outro</MenuItem>
+            </CustomSelectField>
+          </CustomFormControlField>
         </div>
         <CustomTextField
           className={style.bottomSpace}
