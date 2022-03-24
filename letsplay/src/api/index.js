@@ -60,7 +60,15 @@ export async function verifyToken() {
 }
 
 /* ROUTES USER */
-export async function createUser(name, lastName, phoneNumber, email, password, setIsLoading) {
+export async function createUser(
+  name,
+  lastName,
+  gender,
+  phoneNumber,
+  email,
+  password,
+  setIsLoading
+) {
   try {
     setIsLoading(true);
 
@@ -69,6 +77,7 @@ export async function createUser(name, lastName, phoneNumber, email, password, s
       user: {
         name,
         lastName,
+        gender,
         phoneNumber,
         email,
         password,
@@ -90,7 +99,7 @@ export async function createUser(name, lastName, phoneNumber, email, password, s
   }
 }
 
-export async function updateUser(id, name, lastName, phoneNumber, email, setIsLoading) {
+export async function updateUser(id, name, lastName, gender, phoneNumber, email, setIsLoading) {
   try {
     setIsLoading(true);
 
@@ -99,6 +108,7 @@ export async function updateUser(id, name, lastName, phoneNumber, email, setIsLo
       user: {
         name,
         lastName,
+        gender,
         phoneNumber,
         email,
       },

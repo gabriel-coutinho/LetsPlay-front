@@ -18,6 +18,7 @@ export default function RegisterForm() {
 
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
@@ -26,6 +27,7 @@ export default function RegisterForm() {
 
   const [errorName, setErrorName] = useState(false);
   const [errorLastName, setErrorLastName] = useState(false);
+  const [errorGender, setErrorGender] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
@@ -70,6 +72,13 @@ export default function RegisterForm() {
     return !validated;
   };
 
+  const validateGender = () => {
+    const validated = !gender || gender === '';
+    setErrorGender(validated);
+
+    return !validated;
+  };
+
   const validatePhone = () => {
     const validated = !phoneNumber || phoneNumber === '';
     setErrorPhoneNumber(validated);
@@ -83,6 +92,7 @@ export default function RegisterForm() {
     validateConfirmPassword();
     validateName();
     validateLastName();
+    validateGender();
     validatePhone();
 
     return (
@@ -91,6 +101,7 @@ export default function RegisterForm() {
       validateConfirmPassword() &&
       validateName() &&
       validateLastName() &&
+      validateGender() &&
       validatePhone()
     );
   };
@@ -115,6 +126,7 @@ export default function RegisterForm() {
       const resultRegister = await createUser(
         name,
         lastName,
+        gender,
         phoneNumber,
         email,
         password,
@@ -174,15 +186,26 @@ export default function RegisterForm() {
           onKeyDown={handleKeyDown}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <CustomTextField
-          className={style.bottomSpace}
-          label="Telefone*"
-          error={errorPhoneNumber}
-          variant="outlined"
-          value={phoneNumber}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
+        <div className={`${style.twoFields} ${style.bottomSpace}`}>
+          <CustomTextField
+            className={style.shortField}
+            label="Telefone*"
+            error={errorPhoneNumber}
+            variant="outlined"
+            value={phoneNumber}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+          <CustomTextField
+            className={style.shortField}
+            label="Gênero*"
+            error={errorGender}
+            variant="outlined"
+            value={gender}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setGender(e.target.value)}
+          />
+        </div>
         <CustomTextField
           className={style.bottomSpace}
           label="Senha*"

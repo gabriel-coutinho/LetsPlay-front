@@ -15,11 +15,13 @@ export default function EditUserForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState(loggedUser.name);
   const [lastName, setLastName] = useState(loggedUser.lastName);
+  const [gender, setGender] = useState(loggedUser.gender);
   const [email, setEmail] = useState(loggedUser.email);
   const [phoneNumber, setPhoneNumber] = useState(loggedUser.phoneNumber);
 
   const [errorName, setErrorName] = useState(false);
   const [errorLastName, setErrorLastName] = useState(false);
+  const [errorGender, setErrorGender] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPhoneNumber, setErrorPhoneNumnber] = useState(false);
 
@@ -33,6 +35,13 @@ export default function EditUserForm() {
   const validateLastName = () => {
     const validated = !lastName || lastName.trim() === '';
     setErrorLastName(validated);
+
+    return !validated;
+  };
+
+  const validateGender = () => {
+    const validated = !gender || gender === '';
+    setErrorGender(validated);
 
     return !validated;
   };
@@ -53,15 +62,23 @@ export default function EditUserForm() {
   const validateInputs = () => {
     validateName();
     validateLastName();
+    validateGender();
     validateEmail();
     validatePhoneNumber();
 
-    return validateName() && validateLastName() && validateEmail() && validatePhoneNumber();
+    return (
+      validateName() &&
+      validateLastName() &&
+      validateGender() &&
+      validateEmail() &&
+      validatePhoneNumber()
+    );
   };
 
   const hasChanges = () =>
     name !== loggedUser.name ||
     lastName !== loggedUser.lastName ||
+    gender !== loggedUser.gender ||
     email !== loggedUser.email ||
     phoneNumber !== loggedUser.phoneNumber;
 
@@ -72,6 +89,7 @@ export default function EditUserForm() {
           loggedUser.id,
           name,
           lastName,
+          gender,
           email,
           phoneNumber,
           setIsLoading
@@ -120,6 +138,17 @@ export default function EditUserForm() {
           value={lastName}
           onKeyDown={handleKeyDown}
           onChange={(e) => setLastName(e.target.value)}
+        />
+        <CustomTextField
+          className={style.bottomSpace}
+          label="Gênero*"
+          type="text"
+          defaultValue={loggedUser.gender}
+          error={errorGender}
+          variant="outlined"
+          value={gender}
+          onKeyDown={handleKeyDown}
+          onChange={(e) => setGender(e.target.value)}
         />
         <CustomTextField
           className={style.bottomSpace}

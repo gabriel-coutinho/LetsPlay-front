@@ -13,12 +13,14 @@ export default function UserView() {
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
   useEffect(() => {
     setName(loggedUser.name);
     setLastName(loggedUser.lastName);
+    setGender(loggedUser.gender);
     setEmail(loggedUser.email);
     setPhoneNumber(loggedUser.phoneNumber);
 
@@ -45,6 +47,9 @@ export default function UserView() {
       </Typography>
       <Typography>
         <b>Sobrenome:</b> {lastName}
+      </Typography>
+      <Typography>
+        <b>Gênero:</b> {gender}
       </Typography>
       <Typography>
         <b>Email:</b> {email}

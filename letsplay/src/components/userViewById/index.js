@@ -11,6 +11,7 @@ export default function UserView({ idUser }) {
   const style = useStyles();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -21,6 +22,7 @@ export default function UserView({ idUser }) {
     if (result) {
       setName(result.data.name);
       setLastName(result.data.lastName);
+      setGender(result.data.gender);
       setEmail(result.data.email);
       setPhoneNumber(result.data.phoneNumber);
       setIsLoading(false);
@@ -39,6 +41,9 @@ export default function UserView({ idUser }) {
       </Typography>
       <Typography>
         <b>Sobrenome:</b> {lastName}
+      </Typography>
+      <Typography>
+        <b>Gênero:</b> {gender}
       </Typography>
       <Typography>
         <b>Email:</b> {email}
