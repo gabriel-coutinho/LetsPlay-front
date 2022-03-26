@@ -9,7 +9,7 @@ import { PostsContext } from './contexts';
 
 function Home() {
   const history = useHistory();
-  const classes = useStyles();
+  const style = useStyles();
   const [isLoading, setIsLoading] = useState(false);
   const [postsHome, setPostsHome] = useState([]);
   const [pageNumber, setPageNumber] = useState(2);
@@ -50,8 +50,8 @@ function Home() {
 
   return (
     <>
-      <div className={classes.spinner}>{isLoading && <Spinner />}</div>
-      <div className={classes.root}>
+      <div className={style.spinner}>{isLoading && <Spinner />}</div>
+      <div className={style.root}>
         <InfiniteScroll dataLength={postsHome.length} next={getData} hasMore={hasMore}>
           <PostsContext.Provider value={{ updatePosts }}>
             {postsHome.map((post) => (

@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from 'react-router-dom';
 import { useStyles } from './styles';
+import { verifyToken } from '../../api';
 
 export default function Help() {
+  const history = useHistory;
   const style = useStyles();
+  const [token] = useState(localStorage.getItem('letsplay_token'));
+
+  useEffect(async () => {
+    if (token) {
+      const result = await verifyToken(token);
+      if (!result) history.push('/');
+    } else {
+      history.push('/');
+    }
+  }, [token]);
+
   return (
     <div className={style.root}>
       <Typography paragraph variant="h4">

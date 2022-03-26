@@ -1,13 +1,14 @@
 /* eslint consistent-return: off */
 
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useStyles } from './styles';
 
 import { CustomTextField } from '../styles/inputs.style';
-import { CustomButton } from '../styles/button.style';
+import { CustomButton, CancelButton } from '../styles/button.style';
 import { getSports, createPost } from '../../api';
 import { fullDatetimeNewPost } from '../../utils/dateFormat';
 import Dialog from '../SimpleDialogSport';
@@ -17,7 +18,7 @@ import '../loginForm/loginForm.css';
 
 export default function RegisterForm({ ownerId }) {
   const style = useStyles();
-
+  const history = useHistory();
   const [title, setTitle] = useState('');
   const [describe, setDescribe] = useState('');
   const [price, setPrice] = useState(0);
@@ -247,6 +248,8 @@ export default function RegisterForm({ ownerId }) {
     }
   };
 
+  const handleCancel = () => history.push('/home');
+
   return (
     <>
       <form className={style.form}>
@@ -388,9 +391,12 @@ export default function RegisterForm({ ownerId }) {
             onChange={(e) => setComplement(e.target.value)}
           />
         </div>
-        <CustomButton size="large" className={style.bottomSpace} onClick={createPostRequest}>
+        <CustomButton size="large" className={style.bottomSpaceButton} onClick={createPostRequest}>
           CRIAR POST
         </CustomButton>
+        <CancelButton size="medium" onClick={handleCancel}>
+          Cancelar
+        </CancelButton>
         <div className={style.spinner}>{isLoading && <Spinner />}</div>
       </form>
     </>

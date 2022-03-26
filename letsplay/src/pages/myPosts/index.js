@@ -1,20 +1,32 @@
 import React, { useEffect, useState, useContext } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useHistory } from 'react-router-dom';
 import PostCard from '../../components/postCard';
-import { getMyPosts } from '../../api';
+import { getMyPosts, verifyToken } from '../../api';
 import Spinner from '../../components/spinnerLoading';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
 import { useStyles } from './styles';
 import { PostsContext } from '../home/contexts';
 
 function MyPosts() {
-  const classes = useStyles();
+  const history = useHistory();
+  const style = useStyles();
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(2);
   const [hasMore, setHasMore] = useState(true);
   const { loggedUser } = useContext(LoggedUserContext);
   const [myPosts, setMyPosts] = useState([]);
   const [shouldUpdatePosts, setShouldUpdatePosts] = useState(false);
+  const [token] = useState(localStorage.getItem('letsplay_token'));
+
+  useEffect(async () => {
+    if (token) {
+      const result = await verifyToken(token);
+      if (!result) history.push('/');
+    } else {
+      history.push('/');
+    }
+  }, [token]);
 
   useEffect(async () => {
     const response = await getMyPosts(1, setIsLoading);
@@ -39,8 +51,8 @@ function MyPosts() {
 
   return (
     <>
-      <div className={classes.spinner}>{isLoading && <Spinner />}</div>
-      <div className={classes.root}>
+      <div className={style.spinner}>{isLoading && <Spinner />}</div>
+      <div className={style.root}>
         <InfiniteScroll dataLength={myPosts.length} next={getData} hasMore={hasMore}>
           <PostsContext.Provider value={{ updatePosts }}>
             {myPosts.map((post) => (

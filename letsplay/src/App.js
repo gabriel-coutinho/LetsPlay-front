@@ -15,6 +15,7 @@ import UserById from './pages/userById';
 import MyPosts from './pages/myPosts';
 import PostsByUserId from './pages/postsByUserId';
 import EditPost from './pages/editPost';
+import PostById from './pages/postById';
 import NotFound from './pages/notFound';
 import NavBar from './components/navBar';
 import { LoggedUserProvider } from './utils/loggedUserProvider';
@@ -49,35 +50,37 @@ function App() {
                 <Home />
               </Route>
               <Route exact path="/newPost">
-                {!validToken ? <Redirect to="/" /> : <NewPost />}
+                <NewPost />
               </Route>
               <Route exact path="/help">
-                {!validToken ? <Redirect to="/" /> : <Help />}
+                <Help />
               </Route>
               <Route exact path="/me">
-                {!validToken ? <Redirect to="/" /> : <User />}
+                <User />
               </Route>
               <Route exact path="/me/edit">
-                {!validToken ? <Redirect to="/" /> : <EditUser />}
+                <EditUser />
               </Route>
               <Route exact path="/me/changePassword">
-                {!validToken ? <Redirect to="/" /> : <ChangePassword />}
+                <ChangePassword />
               </Route>
               <Route exact path="/requests">
-                {!validToken ? <Redirect to="/" /> : <Requests />}
+                <Requests />
               </Route>
               <Route exact path="/user/:idUser">
-                {!validToken ? <Redirect to="/" /> : <UserById />}
+                <UserById />
               </Route>
               <Route exact path="/myPosts">
-                {!validToken ? <Redirect to="/" /> : <MyPosts />}
+                <MyPosts />
               </Route>
               <Route exact path="/user/:idUser/posts">
-                {!validToken ? <Redirect to="/" /> : <PostsByUserId />}
+                <PostsByUserId />
               </Route>
               <Route exact path="/editPost/:idPost">
-                {/* {!validToken ? < Redirect to="/" /> : <EditPost />} */}
                 <EditPost />
+              </Route>
+              <Route exact path="/post/:idPost">
+                <PostById />
               </Route>
               <Route exact path="/*">
                 {!validToken ? <Redirect to="/" /> : <NotFound />}

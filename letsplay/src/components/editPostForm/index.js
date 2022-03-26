@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useStyles } from './styles';
 
 import { CustomTextField } from '../styles/inputs.style';
-import { CustomButton } from '../styles/button.style';
+import { CustomButton, CancelButton } from '../styles/button.style';
 import { getSports, updatePost } from '../../api';
 import { fullDatetime } from '../../utils/dateFormat';
 import { PostContext } from '../../pages/editPost/contexts';
@@ -18,7 +19,7 @@ import '../loginForm/loginForm.css';
 
 export default function EditPostForm() {
   const style = useStyles();
-
+  const history = useHistory();
   const { postById } = useContext(PostContext);
   const [title, setTitle] = useState('');
   const [describe, setDescribe] = useState('');
@@ -258,6 +259,8 @@ export default function EditPostForm() {
     }
   };
 
+  const handleCancel = () => history.push('/home');
+
   return (
     <>
       <form className={style.form}>
@@ -396,9 +399,12 @@ export default function EditPostForm() {
             onChange={(e) => setComplement(e.target.value)}
           />
         </div>
-        <CustomButton size="large" className={style.bottomSpace} onClick={updatePostRequest}>
+        <CustomButton size="medium" className={style.bottomSpaceButton} onClick={updatePostRequest}>
           ATUALIZAR POST
         </CustomButton>
+        <CancelButton size="medium" onClick={handleCancel}>
+          Cancelar
+        </CancelButton>
         <div className={style.spinner}>{isLoading && <Spinner />}</div>
       </form>
     </>

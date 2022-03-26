@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { PostContext } from './contexts';
 import Spinner from '../../components/spinnerLoading';
 import { useStyles } from './styles';
-import { getPostById } from '../../api';
+import { getPostById, verifyToken } from '../../api';
 import EditPostForm from '../../components/editPostForm';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
 
@@ -16,6 +16,16 @@ export default function EditPost() {
   const [isLoading, setIsLoading] = useState(false);
   const [postById, setPostById] = useState({});
   const [comparable, setComparable] = useState(false);
+  const [token] = useState(localStorage.getItem('letsplay_token'));
+
+  useEffect(async () => {
+    if (token) {
+      const result = await verifyToken(token);
+      if (!result) history.push('/');
+    } else {
+      history.push('/');
+    }
+  }, [token]);
 
   useEffect(() => {
     if (Object.keys(loggedUser).length !== 0) {

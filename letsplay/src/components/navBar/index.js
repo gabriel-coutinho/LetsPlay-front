@@ -53,7 +53,7 @@ export default function NavBar() {
     <div className={style.root}>
       {!isLoading && (
         <AppBar position="static" className={style.appBar}>
-          <Tabs variant="scrollable" scrollButtons="off">
+          <Tabs variant="fullWidth">
             <Tab
               icon={<IconLogo />}
               onClick={() => {

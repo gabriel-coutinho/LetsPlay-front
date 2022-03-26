@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -19,17 +19,27 @@ export default function EditUserForm() {
   const style = useStyles();
   const { loggedUser } = useContext(LoggedUserContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState(loggedUser.name);
-  const [lastName, setLastName] = useState(loggedUser.lastName);
-  const [gender, setGender] = useState(loggedUser.gender);
-  const [email, setEmail] = useState(loggedUser.email);
-  const [phoneNumber, setPhoneNumber] = useState(loggedUser.phoneNumber);
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [gender, setGender] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const [errorName, setErrorName] = useState(false);
   const [errorLastName, setErrorLastName] = useState(false);
   const [errorGender, setErrorGender] = useState(false);
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPhoneNumber, setErrorPhoneNumber] = useState(false);
+
+  useEffect(() => {
+    if (loggedUser) {
+      setName(loggedUser.name);
+      setLastName(loggedUser.lastName);
+      setGender(loggedUser.gender);
+      setEmail(loggedUser.email);
+      setPhoneNumber(loggedUser.phoneNumber);
+    }
+  }, [loggedUser]);
 
   const validateName = () => {
     const validated = !name || name.trim() === '';
@@ -177,7 +187,6 @@ export default function EditUserForm() {
           className={style.bottomSpace}
           label="Telefone*"
           type="tel"
-          defaultValue="888"
           error={errorPhoneNumber}
           variant="outlined"
           value={phoneNumber}

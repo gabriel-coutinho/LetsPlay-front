@@ -334,6 +334,26 @@ export async function getMyPosts(page, setIsLoading) {
   }
 }
 
+export async function getMyRequests(page, setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/user/requests`;
+    const result = await api.get(url, { params: { page, pageSize: 10 } });
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function getPostsByUserId(ownerId, page, setIsLoading) {
   try {
     setIsLoading(true);
@@ -477,6 +497,24 @@ export async function getSports() {
   try {
     const url = `/sport`;
     const result = await api.get(url);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
+/* ROUTES REQUESTS */
+
+export async function deleteRequest(id) {
+  try {
+    const url = `/request/${id}`;
+    const result = await api.delete(url);
 
     return result;
   } catch (error) {

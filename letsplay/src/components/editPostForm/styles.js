@@ -17,6 +17,10 @@ export const useStyles = makeStyles({
     marginBottom: '30px',
   },
 
+  bottomSpaceButton: {
+    marginBottom: '1%',
+  },
+
   spinner: {
     marginLeft: 'auto',
     marginRight: 'auto',
