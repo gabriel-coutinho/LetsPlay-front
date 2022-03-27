@@ -4,7 +4,7 @@ import { verifyToken } from '../../api';
 import UserView from '../../components/userView';
 
 export default function User() {
-  const history = useHistory;
+  const history = useHistory();
   const [token] = useState(localStorage.getItem('letsplay_token'));
 
   useEffect(async () => {

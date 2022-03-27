@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -12,11 +13,18 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import ChatIcon from '@material-ui/icons/Chat';
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { getCommentsByPostId, deletePost } from '../../api';
+import {
+  getCommentsByPostId,
+  deletePost,
+  createRequest,
+  deleteRequest,
+  existedOpenRequest,
+} from '../../api';
 import { LoggedUserContext } from '../../utils/loggedUserProvider';
 import { addressToPost } from '../../utils/addressFormat';
 import { fullDatePost } from '../../utils/dateFormat';
@@ -31,6 +39,10 @@ export default function PostCard({ post }) {
   const style = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [myPost, setMyPost] = useState(false);
+  const [expired, setExpired] = useState(false);
+  const [hasOpenRequest, setHasOpenRequest] = useState();
+  const [checkExistedOpenRequest, setCheckExistedOpenRequest] = useState(true);
+  const [addRemoveIcon, setAddRemoveIcon] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
   const { loggedUser } = useContext(LoggedUserContext);
   const { updatePosts } = useContext(PostsContext);
@@ -51,8 +63,24 @@ export default function PostCard({ post }) {
   };
 
   useEffect(async () => {
+    const now = new Date();
+    const datePost = new Date(post.date);
+    if (post.status === 'EXPIRED' || datePost < now) {
+      setExpired(true);
+    }
     setAddress(addressToPost(post.address));
   }, []);
+
+  useEffect(async () => {
+    const resultExistedOpenRequest = await existedOpenRequest(post.id);
+    if (!resultExistedOpenRequest) {
+      setHasOpenRequest(resultExistedOpenRequest);
+      setAddRemoveIcon(<AddIcon />);
+    } else {
+      setHasOpenRequest(resultExistedOpenRequest.data);
+      setAddRemoveIcon(<ClearIcon />);
+    }
+  }, [checkExistedOpenRequest]);
 
   useEffect(async () => {
     const response = await getCommentsByPostId(post.id, setIsLoading);
@@ -91,7 +119,27 @@ export default function PostCard({ post }) {
     updatePosts();
   };
 
-  const handleInfoUser = () => history.push(`/user/${owner.id}`);
+  const handleInfoUser = () => {
+    if (!myPost) {
+      history.push(`/user/${owner.id}`);
+    } else {
+      history.push(`/post/${post.id}`);
+    }
+  };
+
+  const handleCreateDeleteRequest = async () => {
+    if (hasOpenRequest) {
+      await deleteRequest(hasOpenRequest.id);
+      toast.success('Requisição excluida com sucesso!');
+      setCheckExistedOpenRequest((prev) => !prev);
+    } else {
+      const newRequest = await createRequest(post.id);
+      if (newRequest) {
+        toast.success('Requisição criada com sucesso!');
+        setCheckExistedOpenRequest((prev) => !prev);
+      }
+    }
+  };
 
   return (
     <div>
@@ -140,11 +188,18 @@ export default function PostCard({ post }) {
           <CardContent>
             {post.describe && <Typography variant="body1">Descrição: {post.describe}</Typography>}
             <Typography variant="body2">Local: {address}</Typography>
+            {expired && (
+              <Typography variant="body2">
+                <b>EXPIRADO!</b>
+              </Typography>
+            )}
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="request">
-              <AddIcon />
-            </IconButton>
+            {!myPost && (
+              <IconButton onClick={handleCreateDeleteRequest} aria-label="request">
+                {addRemoveIcon}
+              </IconButton>
+            )}
             <IconButton onClick={handleInfoUser} aria-label="info user">
               <InfoOutlinedIcon />
             </IconButton>

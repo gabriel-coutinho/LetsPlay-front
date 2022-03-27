@@ -4,7 +4,7 @@ import { verifyToken } from '../../api';
 import EditUserForm from '../../components/editUserForm';
 
 export default function EditUser() {
-  const history = useHistory;
+  const history = useHistory();
   const [token] = useState(localStorage.getItem('letsplay_token'));
 
   useEffect(async () => {

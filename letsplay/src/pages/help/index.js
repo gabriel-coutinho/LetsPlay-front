@@ -5,7 +5,7 @@ import { useStyles } from './styles';
 import { verifyToken } from '../../api';
 
 export default function Help() {
-  const history = useHistory;
+  const history = useHistory();
   const style = useStyles();
   const [token] = useState(localStorage.getItem('letsplay_token'));
 

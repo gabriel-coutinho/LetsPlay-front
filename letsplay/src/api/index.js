@@ -511,6 +511,37 @@ export async function getSports() {
 
 /* ROUTES REQUESTS */
 
+export async function createRequest(postId) {
+  try {
+    const url = `/request`;
+    const body = {
+      request: {
+        postId,
+      },
+    };
+    const result = await api.post(url, body);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
+/* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
+export async function existedOpenRequest(postId) {
+  try {
+    const url = `/request/me/${postId}`;
+    const result = await api.get(url);
+
+    return result;
+  } catch (error) {}
+}
+
 export async function deleteRequest(id) {
   try {
     const url = `/request/${id}`;
