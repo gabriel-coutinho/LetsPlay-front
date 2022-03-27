@@ -1,6 +1,7 @@
 /* eslint consistent-return: off */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import ReactCardFlip from 'react-card-flip';
 import Container from '@material-ui/core/Container';
 import { useStyles } from './styles';
@@ -10,10 +11,20 @@ import ForgetPassword from '../../components/forgetPassword';
 import logo from './logo.png';
 
 import './login.css';
+import { verifyToken } from '../../api';
 
 function Login() {
+  const history = useHistory();
   const style = useStyles();
   const [isFlipped, setIsFlipped] = useState(false);
+  const [token] = useState(localStorage.getItem('letsplay_token'));
+
+  useEffect(async () => {
+    if (token) {
+      const result = await verifyToken(token);
+      if (result) history.push('/home');
+    }
+  }, [token]);
 
   return (
     <div className="login-background">
