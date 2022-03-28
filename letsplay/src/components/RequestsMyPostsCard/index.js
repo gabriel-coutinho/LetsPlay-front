@@ -13,6 +13,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { PostRequestsContext } from '../requestsMyPostsList/contexts';
+import { RequestsContext } from '../postCardMyRequest/contexts';
 import { updateRequest } from '../../api';
 import { fullDateComment } from '../../utils/dateFormat';
 import { useStyles } from './styles';
@@ -21,6 +22,7 @@ export default function RequestMyPostsCard({ request }) {
   const style = useStyles();
   const history = useHistory();
   const { updatePosts } = useContext(PostRequestsContext);
+  const { isFull } = useContext(RequestsContext);
   const requestDate = fullDateComment(request.date);
   const fullNameOwner = `${request.user.name.concat(` ${request.user.lastName}`)}`;
   const [labelByStatus, setLabelByStatus] = useState('');
@@ -87,7 +89,13 @@ export default function RequestMyPostsCard({ request }) {
           {labelByStatus}
         </Typography>
       </CardContent>
-      <IconButton className={style.expand} onClick={handleAccept} aria-label="accept">
+      {isFull && <Typography>CHEIO</Typography>}
+      <IconButton
+        className={style.expand}
+        onClick={handleAccept}
+        aria-label="accept"
+        disabled={isFull}
+      >
         <CheckCircleOutlineIcon fontSize="large" />
       </IconButton>
       <IconButton className={style.expand} onClick={handleReject} aria-label="reject">

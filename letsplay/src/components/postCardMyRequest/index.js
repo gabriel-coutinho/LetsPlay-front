@@ -13,11 +13,13 @@ import { LoggedUserContext } from '../../utils/loggedUserProvider';
 import RequestsMyPostsCard from '../requestsMyPostsCard';
 import { fullDateComment } from '../../utils/dateFormat';
 import { useStyles } from './styles';
+import { RequestsContext } from './contexts';
 
 export default function PostCardMyRequest({ post }) {
   const style = useStyles();
   const history = useHistory();
   const [expanded, setExpanded] = useState(false);
+  const [isFull, setIsFull] = useState(false);
   const { loggedUser } = useContext(LoggedUserContext);
   const [requestIcon, setRequestIcon] = useState(<NotificationsIcon />);
   const postDate = fullDateComment(post.date);
@@ -28,6 +30,10 @@ export default function PostCardMyRequest({ post }) {
   useEffect(() => {
     setRequestIcon(expanded ? <NotificationsIcon /> : <NotificationsNoneOutlinedIcon />);
   }, [expanded]);
+
+  useEffect(() => {
+    setIsFull(post.status === 'FULL');
+  }, [loggedUser]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -69,9 +75,11 @@ export default function PostCardMyRequest({ post }) {
           />
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              {requests.map((request) => (
-                <RequestsMyPostsCard key={request.id} request={request} />
-              ))}
+              <RequestsContext.Provider value={isFull}>
+                {requests.map((request) => (
+                  <RequestsMyPostsCard key={request.id} request={request} />
+                ))}
+              </RequestsContext.Provider>
             </CardContent>
           </Collapse>
         </Card>
