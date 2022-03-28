@@ -1,22 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import PostCard from '../../components/postCard';
-import { getMyPosts, verifyToken } from '../../api';
-import Spinner from '../../components/spinnerLoading';
-import { LoggedUserContext } from '../../utils/loggedUserProvider';
+import AppBar from '@material-ui/core/AppBar';
+import Tab from '@material-ui/core/Tab';
 import { useStyles } from './styles';
-import { PostsContext } from '../home/contexts';
+import MyIncludesPosts from '../../components/myIncludesPosts';
+import MyPostsComponent from '../../components/myPostsComponent';
+import { CustomTabs } from '../../components/styles/tab.style';
+import { verifyToken } from '../../api';
 
-function MyPosts() {
+export default function MyPosts() {
   const history = useHistory();
   const style = useStyles();
-  const [isLoading, setIsLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(2);
-  const [hasMore, setHasMore] = useState(true);
-  const { loggedUser } = useContext(LoggedUserContext);
-  const [myPosts, setMyPosts] = useState([]);
-  const [shouldUpdatePosts, setShouldUpdatePosts] = useState(false);
+  const [value, setValue] = useState(0);
   const [token] = useState(localStorage.getItem('letsplay_token'));
 
   useEffect(async () => {
@@ -28,41 +23,35 @@ function MyPosts() {
     }
   }, [token]);
 
-  useEffect(async () => {
-    const response = await getMyPosts(1, setIsLoading);
-    if (response) setMyPosts(response?.data.rows);
-  }, [loggedUser, shouldUpdatePosts]);
-
-  const updatePosts = () => {
-    setShouldUpdatePosts(!shouldUpdatePosts);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
-  const getPosts = async () => {
-    const result = await getMyPosts(pageNumber, setIsLoading);
-    return result?.data;
-  };
-
-  const getData = async () => {
-    const newPosts = await getPosts();
-    setMyPosts((prevPosts) => [...prevPosts, ...newPosts.rows]);
-    setHasMore(newPosts.pages > pageNumber);
-    setPageNumber((prevNumber) => prevNumber + 1);
-  };
+  const a11yProps = (index) => ({
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  });
 
   return (
-    <>
-      <div className={style.spinner}>{isLoading && <Spinner />}</div>
-      <div className={style.root}>
-        <InfiniteScroll dataLength={myPosts.length} next={getData} hasMore={hasMore}>
-          <PostsContext.Provider value={{ updatePosts }}>
-            {myPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </PostsContext.Provider>
-        </InfiniteScroll>
+    <div>
+      <AppBar position="static" className={style.appBar}>
+        <CustomTabs
+          scrollButtons="off"
+          value={value}
+          onChange={handleChange}
+          variant="fullWidth"
+          aria-label="simple tabs example"
+        >
+          <Tab label="Meus posts" {...a11yProps(0)} />
+          <Tab label="Posts que estou incluido" {...a11yProps(1)} />
+        </CustomTabs>
+      </AppBar>
+      <div className={style.root} hidden={value !== 0}>
+        <MyPostsComponent />
       </div>
-    </>
+      <div className={style.root} hidden={value !== 1}>
+        <MyIncludesPosts />
+      </div>
+    </div>
   );
 }
-
-export default MyPosts;

@@ -39,6 +39,7 @@ export default function PostCard({ post }) {
   const style = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [myPost, setMyPost] = useState(false);
+  const [userInPost, setUserInPost] = useState(false);
   const [expired, setExpired] = useState(false);
   const [isFull, setIsFull] = useState(false);
   const [hasOpenRequest, setHasOpenRequest] = useState();
@@ -93,8 +94,12 @@ export default function PostCard({ post }) {
   }, [shouldUpdateComments]);
 
   useEffect(() => {
-    setMyPost(post.owner.id === loggedUser.id || idsUsersInPost.includes(loggedUser.id));
+    setMyPost(post.owner.id === loggedUser.id);
   }, [loggedUser]);
+
+  useEffect(() => {
+    setUserInPost(idsUsersInPost.includes(loggedUser.id));
+  }, [loggedUser, idsUsersInPost]);
 
   useEffect(() => {
     setCommentIcon(expanded ? <ChatIcon /> : <ChatOutlinedIcon />);
@@ -207,7 +212,7 @@ export default function PostCard({ post }) {
             )}
           </CardContent>
           <CardActions disableSpacing>
-            {!myPost && !isFull && (
+            {!myPost && !userInPost && !isFull && (
               <IconButton onClick={handleCreateDeleteRequest} aria-label="request">
                 {addRemoveIcon}
               </IconButton>

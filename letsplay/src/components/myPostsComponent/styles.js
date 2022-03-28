@@ -7,7 +7,4 @@ export const useStyles = makeStyles(() => ({
   spinner: {
     textAlign: 'center',
   },
-  appBar: {
-    backgroundColor: '#6E7582',
-  },
 }));
