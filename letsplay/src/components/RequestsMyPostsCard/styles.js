@@ -2,14 +2,19 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
   root: {
-    width: '90%',
     margin: 'auto',
-    marginTop: '3%',
-    backgroundColor: '#046582',
+    marginBottom: '1%',
+    backgroundColor: '#BB8082',
+  },
+  labelIcon: {
+    display: 'flex',
   },
   media: {
     height: 0,
     paddingTop: '12%', // 16:9
+  },
+  a: {
+    cursor: 'pointer',
   },
   expand: {
     marginLeft: 'auto',
@@ -21,6 +26,9 @@ export const useStyles = makeStyles((theme) => ({
     color: 'textSecondary',
   },
   avatar: {
+    backgroundColor: '#6E7582',
+  },
+  gray: {
     backgroundColor: '#6E7582',
   },
 }));

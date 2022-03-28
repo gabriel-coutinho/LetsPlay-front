@@ -1,94 +1,96 @@
-import React, { useState } from 'react';
-// import { toast } from 'react-toastify';
+import React, { useEffect, useState, useContext } from 'react';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
-
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-// import { LoggedUserContext } from '../../utils/loggedUserProvider';
-// import { CommentsContext } from '../postCard/contexts';
-// import { deleteComment } from '../../api';
-// import { fullDateComment } from '../../utils/dateFormat';
+import DoneIcon from '@material-ui/icons/Done';
+import ClearIcon from '@material-ui/icons/Clear';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { PostRequestsContext } from '../requestsMyPostsList/contexts';
+import { updateRequest } from '../../api';
+import { fullDateComment } from '../../utils/dateFormat';
 import { useStyles } from './styles';
 
-export default function MyRequestCard() {
+export default function RequestMyPostsCard({ request }) {
   const style = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  // const [myComment, setMyComment] = useState(false);
-  // const { updateCommentsInPost } = useContext(CommentsContext);
-  // const { owner } = comment;
-  // const { loggedUser } = useContext(LoggedUserContext);
-  // const fullNameOwner = `${owner.name.concat(` ${owner.lastName}`)}`;
-  // const commentDate = fullDateComment(comment.createdAt);
+  const history = useHistory();
+  const { updatePosts } = useContext(PostRequestsContext);
+  const requestDate = fullDateComment(request.date);
+  const fullNameOwner = `${request.user.name.concat(` ${request.user.lastName}`)}`;
+  const [labelByStatus, setLabelByStatus] = useState('');
+  const [status, setStatus] = useState(request.status);
+  const [iconByStatus, setIconByStatus] = useState();
 
-  // useEffect(() => {
-  //   setMyComment(comment.owner.id === loggedUser.id);
-  // }, [loggedUser]);
+  useEffect(() => {
+    if (status) {
+      if (status === 'OPEN') {
+        setLabelByStatus('AGUARDANDO RESPOSTA');
+        setIconByStatus(<MoreHorizIcon />);
+      } else if (status === 'ACCEPTED') {
+        setLabelByStatus('ACEITA');
+        setIconByStatus(<DoneIcon />);
+      } else if (status === 'REJECTED') {
+        setLabelByStatus('REJEITADA');
+        setIconByStatus(<ClearIcon />);
+      }
+    }
+  }, [request]);
 
-  const handleMoreClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const goToUserById = () => {
+    history.push(`/user/${request.user.id}`);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleAccept = async () => {
+    const statusAccepted = 'ACCEPTED';
+    const result = await updateRequest(request.id, statusAccepted);
+    if (result) {
+      setStatus(result.data?.status);
+      updatePosts();
+      toast.success('Requisição aceita!');
+    }
   };
 
-  const handleDelete = async () => {
-    setAnchorEl(null);
-    // await deleteComment(comment.id);
-    // toast.success('Comentário excluido com sucesso!');
-    // updateCommentsInPost();
+  const handleReject = async () => {
+    const statusRejected = 'REJECTED';
+    const result = await updateRequest(request.id, statusRejected);
+    if (result) {
+      setStatus(result.data?.status);
+      updatePosts();
+      toast.success('Requisição rejeitada!');
+    }
   };
-
-  const TODO = () => setAnchorEl(null);
 
   return (
     <Card className={style.root}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={style.avatar}>
-            TE
-            {/* {owner.name?.charAt(0) + owner.lastName?.charAt(0)} */}
+            {request.user.name?.charAt(0) + request.user.lastName?.charAt(0)}
           </Avatar>
         }
-        action={
-          // myComment ? (
-          <div>
-            <IconButton className={style.expand} onClick={handleMoreClick} aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleDelete}>Excluir</MenuItem>
-            </Menu>
-          </div>
-          // ) : (
-          //     <></>
-          //   )
+        title={
+          <a className={style.a} onClick={goToUserById}>
+            <b>{fullNameOwner}</b>
+          </a>
         }
-        title="teste" // {fullNameOwner}
-        subheader="teste" // {commentDate}
+        subheader={`Expira em: ${requestDate}`}
       />
       <CardContent>
-        <Typography paragraph>teste</Typography>
+        <Typography paragraph className={style.labelIcon}>
+          {iconByStatus}
+          {labelByStatus}
+        </Typography>
       </CardContent>
-      <IconButton className={style.expand} onClick={TODO} aria-label="accept">
+      <IconButton className={style.expand} onClick={handleAccept} aria-label="accept">
         <CheckCircleOutlineIcon fontSize="large" />
       </IconButton>
-      <IconButton className={style.expand} onClick={TODO} aria-label="reject">
+      <IconButton className={style.expand} onClick={handleReject} aria-label="reject">
         <CancelOutlinedIcon fontSize="large" />
       </IconButton>
     </Card>

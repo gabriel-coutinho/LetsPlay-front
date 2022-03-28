@@ -334,6 +334,26 @@ export async function getMyPosts(page, setIsLoading) {
   }
 }
 
+export async function getMyPostsWithReq(setIsLoading) {
+  try {
+    setIsLoading(true);
+
+    const url = `/user/me/postsWithReq`;
+    const result = await api.get(url);
+
+    setIsLoading(false);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    setIsLoading(false);
+    toast.error(msg);
+  }
+}
+
 export async function getMyRequests(page, setIsLoading) {
   try {
     setIsLoading(true);
@@ -520,6 +540,27 @@ export async function createRequest(postId) {
       },
     };
     const result = await api.post(url, body);
+
+    return result;
+  } catch (error) {
+    let msg = '';
+
+    if (error.response) msg = error.response.data.error;
+    else msg = 'Network failed';
+
+    toast.error(msg);
+  }
+}
+
+export async function updateRequest(id, status) {
+  try {
+    const url = `/request/${id}`;
+    const body = {
+      request: {
+        status,
+      },
+    };
+    const result = await api.put(url, body);
 
     return result;
   } catch (error) {

@@ -40,9 +40,11 @@ export default function PostCard({ post }) {
   const [expanded, setExpanded] = useState(false);
   const [myPost, setMyPost] = useState(false);
   const [expired, setExpired] = useState(false);
+  const [isFull, setIsFull] = useState(false);
   const [hasOpenRequest, setHasOpenRequest] = useState();
   const [checkExistedOpenRequest, setCheckExistedOpenRequest] = useState(true);
   const [addRemoveIcon, setAddRemoveIcon] = useState();
+  const [idsUsersInPost, serIdsUsersInPost] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const { loggedUser } = useContext(LoggedUserContext);
   const { updatePosts } = useContext(PostsContext);
@@ -68,6 +70,8 @@ export default function PostCard({ post }) {
     if (post.status === 'EXPIRED' || datePost < now) {
       setExpired(true);
     }
+    serIdsUsersInPost(post.users.map((user) => user.id));
+    setIsFull(post.status === 'FULL');
     setAddress(addressToPost(post.address));
   }, []);
 
@@ -89,7 +93,7 @@ export default function PostCard({ post }) {
   }, [shouldUpdateComments]);
 
   useEffect(() => {
-    setMyPost(post.owner.id === loggedUser.id);
+    setMyPost(post.owner.id === loggedUser.id || idsUsersInPost.includes(loggedUser.id));
   }, [loggedUser]);
 
   useEffect(() => {
@@ -120,7 +124,7 @@ export default function PostCard({ post }) {
   };
 
   const handleInfoUser = () => {
-    if (!myPost) {
+    if (post.owner.id !== loggedUser.id) {
       history.push(`/user/${owner.id}`);
     } else {
       history.push(`/post/${post.id}`);
@@ -187,6 +191,14 @@ export default function PostCard({ post }) {
           <CardMedia className={style.media} image={sport.image.firebaseUrl} title="Sport image" />
           <CardContent>
             {post.describe && <Typography variant="body1">Descrição: {post.describe}</Typography>}
+            {post.price ? (
+              <Typography variant="body1">Preço: R$ {post.price}</Typography>
+            ) : (
+              <Typography variant="body1">Preço: GRÁTIS</Typography>
+            )}
+            <Typography variant="body1">
+              Vagas ocupadas: {post.usersCount}/{post.vacancy}
+            </Typography>
             <Typography variant="body2">Local: {address}</Typography>
             {expired && (
               <Typography variant="body2">
@@ -195,7 +207,7 @@ export default function PostCard({ post }) {
             )}
           </CardContent>
           <CardActions disableSpacing>
-            {!myPost && (
+            {!myPost && !isFull && (
               <IconButton onClick={handleCreateDeleteRequest} aria-label="request">
                 {addRemoveIcon}
               </IconButton>

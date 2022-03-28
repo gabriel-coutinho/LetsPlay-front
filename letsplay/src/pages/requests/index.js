@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tab from '@material-ui/core/Tab';
 import { useStyles } from './styles';
 import MyRequestsList from '../../components/myRequestsList';
-import RequestsMyPostsList from '../../components/RequestsMyPostsCard';
+import RequestsMyPostsList from '../../components/requestsMyPostsList';
 import { CustomTabs } from '../../components/styles/tab.style';
 import { verifyToken } from '../../api';
 

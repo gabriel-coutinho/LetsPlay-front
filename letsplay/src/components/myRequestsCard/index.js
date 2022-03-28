@@ -18,7 +18,6 @@ import { RequestsContext } from '../myRequestsList/contexts';
 import { deleteRequest } from '../../api';
 import { fullDateComment } from '../../utils/dateFormat';
 import { useStyles } from './styles';
-import { CustomButton } from '../styles/button.style';
 
 export default function MyRequestCard({ request }) {
   const style = useStyles();
@@ -27,6 +26,7 @@ export default function MyRequestCard({ request }) {
   const { updateRequests } = useContext(RequestsContext);
   const { loggedUser } = useContext(LoggedUserContext);
   const requestDate = fullDateComment(request.date);
+  const title = `${request.post.title} - ${request.post.sport.name}`;
   const fullNameOwner = `${loggedUser.name.concat(` ${loggedUser.lastName}`)}`;
   const [labelByStatus, setLabelByStatus] = useState('');
   const [iconByStatus, setIconByStatus] = useState();
@@ -37,10 +37,10 @@ export default function MyRequestCard({ request }) {
       if (status === 'OPEN') {
         setLabelByStatus('AGUARDANDO RESPOSTA');
         setIconByStatus(<MoreHorizIcon />);
-      } else if (status === 'OPEN') {
+      } else if (status === 'ACCEPTED') {
         setLabelByStatus('ACEITA');
         setIconByStatus(<DoneIcon />);
-      } else if (status === 'OPEN') {
+      } else if (status === 'REJECTED') {
         setLabelByStatus('REJEITADA');
         setIconByStatus(<ClearIcon />);
       }
@@ -98,9 +98,9 @@ export default function MyRequestCard({ request }) {
           {iconByStatus}
           {labelByStatus}
         </Typography>
-        <CustomButton className={style.gray} size="medium" onClick={goToPostById}>
-          Ver Post
-        </CustomButton>
+        <a className={style.a} onClick={goToPostById}>
+          {title}
+        </a>
       </CardContent>
     </Card>
   );
